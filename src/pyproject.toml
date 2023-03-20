@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "simple_ai_server"
+version = "0.1.5"
+description = ""
+authors = ["Louis Hénault"]
+readme = "README.md"
+packages = [{include = "simple_ai"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi= "^0.94.1"
+grpcio= "^1.51.3"
+grpcio-tools= "^1.51.3"
+uvicorn= "^0.21.0"
+
+[tool.poetry.scripts]
+simple_ai = 'simple_ai.__main__:main'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

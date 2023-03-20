@@ -1,0 +1,9 @@
+[model]
+    [model.metadata]
+        owned_by    = 'Meta'
+        permission  = []
+        description = ''
+    [model.network]
+        type = 'gRPC'
+        url = 'localhost:50051'
+

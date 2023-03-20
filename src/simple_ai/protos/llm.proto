@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.lm";
+option java_outer_classname = "LanguageModel";
+option objc_class_prefix = "LM";
+
+package languagemodel;
+
+// Interface exported by the server.
+service LanguageModel {
+  // Simple RPC.
+  rpc Complete(Message) returns (Completions) {}
+
+  // Server-to-client streaming RPC.
+  rpc StreamComplete(Message) returns (stream Completions) {}
+}
+
+// LM Query
+message Message {
+  string prompt = 1;
+  string suffix = 2;
+
+  int32 max_tokens    = 3;
+  float temperature   = 4;
+
+  float top_p         = 5;
+  int32 n             = 6;
+  bool stream         = 7;
+
+  int32 logprobs      = 8;
+  bool echo           = 9;
+  string stop         = 10;
+
+  float presence_penalty  = 11;
+  float frequence_penalty = 12;
+
+  int32 best_of       = 13;
+  string logit_bias   = 14;
+}
+
+// Model output
+message Completions {
+  string reply = 1;
+}
