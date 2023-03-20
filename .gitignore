@@ -1,4 +1,7 @@
 *__pycache__/
 *.log
 *.cache
-*.toml
+*models.toml
+*dist/
+*vscode/
+poetry.lock

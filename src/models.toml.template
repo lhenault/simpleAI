@@ -1,8 +1,0 @@
-[llama-7B]
-    [llama-7B.metadata]
-        owned_by    = 'Meta'
-        permission  = []
-        description = ''
-    [llama-7B.network]
-        url = 'localhost:50051'
-
