@@ -64,7 +64,7 @@ You can see see and try of the provided examples in `examples/` directory (might
 
 Thanks to [the Swagger UI](https://github.com/swagger-api/swagger-ui), you can see and try the different endpoints [here](http://127.0.0.1:8080/docs#/):
 
-```![Example query with cUrl](/assets/docs-example.jpg)```
+![Example query with cUrl](/assets/docs-example.jpg)
 
 Or you can directly use the API with the tool of your choice.
 
