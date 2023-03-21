@@ -70,6 +70,22 @@ Or you can directly use the API with the tool of your choice.
 
 ![Example query with cUrl](/assets/curl-example.png)
 
+It's also compatible with [OpenAI python client](https://github.com/openai/openai-python):
+
+```python
+import openai
+
+# Put anything you want in `API key`
+openai.api_key = 'Free the models'
+
+# Point to your own url
+openai.api_base = "http://127.0.0.1:8080/"
+
+# Do your usual things, for instance a completion query:
+print(openai.Model.list())
+completion = openai.Completion.create(model="llama-7B", prompt="Hello everyone this is")
+```
+
 ## Contribute
 
 This is very much work in progress and far from being perfect, so let me know if you want to help. PR, issues, documentation, cool logo, all the usual candidates are welcome.
