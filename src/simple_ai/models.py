@@ -54,7 +54,10 @@ def get_model(model_id: str, metadata: dict=MODELS_ZOO):
         return None
     
 def list_models(metadata: dict=MODELS_ZOO)-> list:
-    return [{'id': key, **meta.get('metadata')} for key, meta in metadata.items()]
+    return dict(
+        data=[{'id': key, **meta.get('metadata')} for key, meta in metadata.items()],
+        object='list'
+    )
 
 def get_model_infos(model_id, metadata: dict=MODELS_ZOO)-> list:
     if model_id in metadata.keys():

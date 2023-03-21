@@ -1,6 +1,6 @@
-from typing import Union
+from typing import Annotated
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 
 from .models import get_model, list_models, get_model_infos
 from .utils import (
@@ -8,7 +8,13 @@ from .utils import (
     add_instructions, format_edits_response, 
     format_chat_log, format_chat_response
 )
-from .dummy import dummy_embedding
+
+from .api_models import (
+    EmbeddingInput, CompletionInput, ChatCompletionInput, InstructionInput
+)
+from .dummy import (
+    dummy_embedding, dummy_complete, dummy_chat, dummy_edit
+)
 
 app = FastAPI(
     title='SimpleAI',
@@ -33,41 +39,29 @@ async def show_model(model_id: str):
 # Completions
 @app.post('/completions/')
 async def complete(
-    model:              str, 
-    prompt:             str='<|endoftext|>',
-    suffix:             str='',
-    max_tokens:         int=7, 
-    temperature:        float=1.,
-    top_p:              float=1.,
-    n:                  int=1,
-    stream:             bool=False,
-    logprobs:           int=0,
-    echo:               bool=False,
-    stop:               Union[str, list]='',
-    presence_penalty:   float=0.,
-    frequence_penalty:  float=0.,
-    best_of:            int=0,
-    logit_bias:         dict={},
-    user:               str=''
+    body: Annotated[
+        CompletionInput,
+        Body(example=dummy_complete)
+    ]
 ):
-    assert logprobs <= 5
+    assert body.logprobs <= 5
     
-    llm = get_model(model_id=model)
+    llm = get_model(model_id=body.model)
     predictions = llm.complete(
-        prompt=prompt,
-        suffix=suffix,
-        max_tokens=max_tokens, 
-        temperature=temperature,
-        top_p=top_p,
-        n=n,
-        stream=stream,
-        logprobs=logprobs,
-        echo=echo,
-        stop=stop,
-        presence_penalty=presence_penalty,
-        frequence_penalty=frequence_penalty,
-        best_of=best_of,
-        logit_bias=logit_bias
+        prompt=body.prompt,
+        suffix=body.suffix,
+        max_tokens=body.max_tokens, 
+        temperature=body.temperature,
+        top_p=body.top_p,
+        n=body.n,
+        stream=body.stream,
+        logprobs=body.logprobs,
+        echo=body.echo,
+        stop=body.stop,
+        presence_penalty=body.presence_penalty,
+        frequence_penalty=body.frequence_penalty,
+        best_of=body.best_of,
+        logit_bias=body.logit_bias
     )
     output = format_autocompletion_response(model_name=llm.name, predictions=predictions)
     return output
@@ -75,32 +69,24 @@ async def complete(
 # Chat / completions
 @app.post('/chat/completions/')
 async def chat_complete(
-    model:              str,
-    messages:           list[dict],
-    temperature:        float=1.,
-    top_p:              float=1.,
-    n:                  int=1,
-    stream:             bool=False,
-    stop:               str|list='',
-    max_tokens:         int=7, 
-    presence_penalty:   float=0.,
-    frequence_penalty:  float=0.,
-    logit_bias:         dict={},
-    user:               str=''
+    body: Annotated[
+        ChatCompletionInput,
+        Body(example=dummy_chat)
+    ]
 ):
-    llm = get_model(model_id=model)
-    input_text = format_chat_log(chat=messages)
+    llm = get_model(model_id=body.model)
+    input_text = format_chat_log(chat=body.messages)
     predictions = llm.complete(
         prompt=input_text,
-        temperature=temperature,
-        top_p=top_p,
-        n=n,
-        stream=stream,
-        max_tokens=max_tokens,
-        stop=stop,
-        presence_penalty=presence_penalty,
-        frequence_penalty=frequence_penalty,
-        logit_bias=logit_bias
+        temperature=body.temperature,
+        top_p=body.top_p,
+        n=body.n,
+        stream=body.stream,
+        max_tokens=body.max_tokens,
+        stop=body.stop,
+        presence_penalty=body.presence_penalty,
+        frequence_penalty=body.frequence_penalty,
+        logit_bias=body.logit_bias
     )
     output = format_chat_response(model_name=llm.name, predictions=predictions)
     return output
@@ -108,33 +94,31 @@ async def chat_complete(
 # Edits
 @app.post('/edits/')
 async def edit(
-    model:              str,
-    instruction:        str,
-    input:              str='',
-    top_p:              float=1.,
-    n:                  int=1,
-    temperature:        float=1.,
-    max_tokens:         int=256
+    body: Annotated[
+        InstructionInput,
+        Body(example=dummy_edit)
+    ]
 ):
-    llm = get_model(model_id=model)
-    input_text = add_instructions(instructions=instruction, text=input)
+    llm = get_model(model_id=body.model)
+    input_text = add_instructions(instructions=body.instruction, text=input)
     
     predictions = llm.complete(
         prompt=input_text,
-        temperature=temperature,
-        top_p=top_p,
-        n=n,
-        max_tokens=max_tokens
+        temperature=body.temperature,
+        top_p=body.top_p,
+        n=body.n,
+        max_tokens=body.max_tokens
     )
     output = format_edits_response(model_name=llm.name, predictions=predictions)
     return output
 
 # Embeddings
-@app.post('/embed/')
+@app.post('/embeddings/')
 async def embed(
-    model:              str,
-    input:              str,
-    user:               str=''
+    body: Annotated[
+        EmbeddingInput,
+        Body(example=dummy_embedding)
+    ]
 ):
-    llm = get_model(model_id=model)
+    # llm = get_model(model_id=body.model)
     return dummy_embedding
