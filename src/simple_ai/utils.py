@@ -44,7 +44,7 @@ def format_edits_response(model_name, predictions) -> dict:
     }
 
  
-def format_chat_response(model_name, predictions) -> dict:
+def format_chat_response(model_name: str, predictions) -> dict:
     response_id         = uuid.uuid4()
     current_timestamp   = int(dt.now().timestamp())
     
@@ -68,6 +68,20 @@ def format_chat_response(model_name, predictions) -> dict:
         ]
     }
 
+def format_embeddings_results(model_name: str, embeddings: list) -> dict:
+    return {
+        'object': 'list',
+        'data': [
+            {
+                'object': 'embedding',
+                'embedding': embedding,
+                'index': idx
+            }
+            for idx, embedding in enumerate(embeddings)
+        ],
+        'model': model_name,
+    }
+    
     
 def add_instructions(instructions: str,  text: str) -> str:
     prompt = f'### Instruction:\n{instructions}.\n\n'

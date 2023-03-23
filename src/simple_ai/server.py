@@ -6,7 +6,8 @@ from .models import get_model, list_models, get_model_infos
 from .utils import (
     format_autocompletion_response, 
     add_instructions, format_edits_response, 
-    format_chat_log, format_chat_response
+    format_chat_log, format_chat_response,
+    format_embeddings_results
 )
 
 from .api_models import (
@@ -120,5 +121,11 @@ async def embed(
         Body(example=dummy_embedding)
     ]
 ):
-    # llm = get_model(model_id=body.model)
-    return dummy_embedding
+    llm = get_model(model_id=body.model, task='embed')
+    if isinstance(body.input, str):
+        body.input = [body.input]
+
+    results = llm.embed(inputs=body.input)
+        
+    output = format_embeddings_results(model_name=llm.name, embeddings=results)
+    return output

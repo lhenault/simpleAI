@@ -64,8 +64,8 @@ class LanguageModelServicer(llm_pb2_grpc.LanguageModelServicer):
         return llm_pb2.Completions(reply=predicted)
 
 
-def serve(address='[::]:50051', model_servicer=LanguageModelServicer()):
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+def serve(address='[::]:50051', model_servicer=LanguageModelServicer(), max_workers=10):
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=max_workers))
     llm_pb2_grpc.add_LanguageModelServicer_to_server(
         model_servicer, server)
     server.add_insecure_port(address=address)

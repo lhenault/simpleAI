@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class EmbeddingInput(BaseModel):
     model: str
-    input: str
+    input: Union[str, list]
     user:  str=''
     
 class CompletionInput(BaseModel):

@@ -4,14 +4,15 @@ import tomllib
 from typing import Union
 from dataclasses import dataclass
 
-from . import client
+from .clients.completion import client as lm_client
+from .clients.embedding import client as embed_client
 
 path = pathlib.Path(os.environ.get('SIMPLEAI_CONFIG_PATH', 'models.toml'))
 with path.open(mode='rb') as fp:
     MODELS_ZOO = tomllib.load(fp)
 
 @dataclass(unsafe_hash=True)
-class RpcLanguageModel:
+class RpcCompletionLanguageModel:
     name: str
     url: str
 
@@ -31,7 +32,7 @@ class RpcLanguageModel:
         best_of:            int=0,
         logit_bias:         dict={},
     ) -> str:
-        return client.run(
+        return lm_client.run(
             url=self.url,
             prompt=prompt, suffix=suffix, max_tokens=max_tokens, temperature=temperature,
             top_p=top_p, n=n, stream=stream, logprobs=logprobs, echo=echo, stop=stop, 
@@ -39,17 +40,34 @@ class RpcLanguageModel:
             best_of=best_of, logit_bias=logit_bias
         )
 
-def select_model_type(model_interface: str='gRPC'):
+@dataclass(unsafe_hash=True)
+class RpcEmbeddingLanguageModel:
+    name: str
+    url: str
+
+    def embed(self, 
+        inputs: Union[str, list]='',
+    ) -> str:
+        return embed_client.run(
+            url=self.url,
+            inputs=inputs
+        )
+
+
+def select_model_type(model_interface: str='gRPC', task: str='complete'):
     if model_interface == 'gRPC':
-        return RpcLanguageModel
-    return RpcLanguageModel
+        if task == 'embed':
+            return RpcEmbeddingLanguageModel
+        return RpcCompletionLanguageModel
+    return RpcCompletionLanguageModel
+
     
-def get_model(model_id: str, metadata: dict=MODELS_ZOO):
+def get_model(model_id: str, metadata: dict=MODELS_ZOO, task: str='complete'):
     if model_id in metadata.keys():
         model_interface = metadata.get(model_id).get('network', dict())
         model_url = model_interface.get('url', None)
         model_interface = model_interface.get('type', None)
-        return select_model_type(model_interface)(name=model_id, url=model_url)
+        return select_model_type(model_interface, task)(name=model_id, url=model_url)
     else:
         return None
     

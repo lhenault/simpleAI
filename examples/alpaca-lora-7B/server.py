@@ -1,8 +1,8 @@
 import logging
 
-from simple_ai.serve.python.server import serve, LanguageModelServicer
+from simple_ai.serve.python.completion.server import serve, LanguageModelServicer
 
-from model import AlpacaModel
+from model import AlpacaModel as Model
 
 
 if __name__ == '__main__':
@@ -16,5 +16,5 @@ if __name__ == '__main__':
 
     logging.info(f'Starting gRPC server on {args.address}')
     
-    model_servicer = LanguageModelServicer(model=AlpacaModel())
+    model_servicer = LanguageModelServicer(model=Model())
     serve(address=args.address, model_servicer=model_servicer)

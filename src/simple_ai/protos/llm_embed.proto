@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.embed";
+option java_outer_classname = "LanguageModelEmbedding";
+option objc_class_prefix = "embed";
+
+package languagemodelembeddings;
+
+// Interface exported by the server.
+service LanguageModel {
+  // Simple RPC
+  rpc Embed(Sentences) returns (ListOfEmbeddings) {}
+}
+
+// Query
+message Sentences {
+  repeated string inputs = 1;
+}
+
+// Embedding
+message Embedding {
+  repeated float feature = 1;
+}
+
+// Model output
+message ListOfEmbeddings {
+  repeated Embedding embedding = 1;
+}

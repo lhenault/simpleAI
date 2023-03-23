@@ -3,7 +3,6 @@
 from __future__ import print_function
 
 from typing import Union
-import logging
 
 import grpc
 from . import llm_pb2
@@ -65,7 +64,3 @@ def run(
             get_completion(stub, message)
         ]
 
-
-if __name__ == '__main__':
-    logging.basicConfig()
-    run()
