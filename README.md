@@ -2,9 +2,10 @@
 
 A self-hosted alternative to the not-so-open AI API. It mostly focus on replicating the main endpoints for LLM:
 
-- Text completion
-- Chat
-- Edits
+- Text completion (`/completions/`)
+- Chat (`/chat/completions/`) (See example [here](/examples/GPT-NeoXT-Chat-Base-20B/))
+- Edits (`/edits/`) (See example [here](/examples/alpaca-lora-7B/))
+- Embeddings (`/embeddings/`) (See example [here](/examples/sentence-transformers))
 
 While it is not an exact replication of the original endpoints, it should be relatively to switch from one to the other, allowing you to experiment with competing approaches quickly and easily.
 
