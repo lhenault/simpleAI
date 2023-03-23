@@ -2,4 +2,4 @@ bitsandbytes
 loralib
 sentencepiece
 transformers
-simple_ai_server>=0.1.7
+simple_ai_server>=0.1.9
