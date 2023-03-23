@@ -1,0 +1,2 @@
+sentence-transformers
+simple_ai_server>=0.1.9
