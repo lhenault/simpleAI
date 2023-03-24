@@ -45,7 +45,34 @@ You can then see the docs and try it [there](http://127.0.0.1:8080/docs#/).
 
 ## Integrating and declaring a model
 
+### Model integration
+
 Models are queried through [gRPC](https://grpc.io/), in order to separate the API itself from the model inference, and to support several languages beyond Python through this protocol.
+
+To expose for instance an embedding model in Python, you simply have to import a few things, and implements the `.embed()` method of your `EmbeddingModel` class:
+
+```python
+import logging
+from dataclasses import dataclass
+
+from simple_ai.serve.python.embedding.server import serve, LanguageModelServicer
+
+@dataclass(unsafe_hash=True)
+class EmbeddingModel:
+    def embed(self, 
+        inputs: list=[],
+    ) -> list:
+        # TODO : implements the embed method
+        return [[]]
+
+if __name__ == '__main__':   
+    model_servicer = LanguageModelServicer(model=EmbeddingModel())
+    serve(address='[::]:50051', model_servicer=model_servicer)
+```
+
+For a completion task, follow the same logic, but import `from simple_ai.serve.python.completion.server` instead, and implements a `complete` method.
+
+### Declaring a model
 
 To add a model, you first need to deploy a gRPC service (using the provided `.proto` file and / or the templates provided in `src/serve`). Once your model is live, you only have to add it to the `models.toml` configuration file. For instance, let's say you've locally deployed a [llama.cpp](https://github.com/ggerganov/llama.cpp) model available on port 50051, just add:
 
