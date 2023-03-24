@@ -121,7 +121,7 @@ import openai
 openai.api_key = 'Free the models'
 
 # Point to your own url
-openai.api_base = "http://127.0.0.1:8080/"
+openai.api_base = "http://127.0.0.1:8080"
 
 # Do your usual things, for instance a completion query:
 print(openai.Model.list())
