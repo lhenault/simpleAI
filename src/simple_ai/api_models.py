@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional, Union
 from pydantic import BaseModel
 
 class EmbeddingInput(BaseModel):
@@ -17,7 +17,7 @@ class CompletionInput(BaseModel):
     stream:             bool=False
     logprobs:           int=0
     echo:               bool=False
-    stop:               Union[str, list]=''
+    stop:               Optional[Union[str, list]]=''
     presence_penalty:   float=0.
     frequence_penalty:  float=0.
     best_of:            int=0
@@ -31,7 +31,7 @@ class ChatCompletionInput(BaseModel):
     top_p:              float=1.
     n:                  int=1
     stream:             bool=False
-    stop:               Union[str, list]=''
+    stop:               Optional[Union[str, list]]=''
     max_tokens:         int=7 
     presence_penalty:   float=0.
     frequence_penalty:  float=0.
