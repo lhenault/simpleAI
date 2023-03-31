@@ -2,7 +2,7 @@ import logging
 from typing import Union
 from dataclasses import dataclass
 
-from simple_ai.serve.python.completion.server import LanguageModel
+from simple_ai.api.grpc.python.completion.server import LanguageModel
 
 from peft import PeftModel
 from transformers import LLaMATokenizer, LLaMAForCausalLM, GenerationConfig

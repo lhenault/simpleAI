@@ -1,6 +1,6 @@
 import logging
 
-from simple_ai.serve.python.embedding.server import serve, LanguageModelServicer
+from simple_ai.api.grpc.python.embedding.server import serve, LanguageModelServicer
 
 from model import SentenceTransformerModel as Model
 
