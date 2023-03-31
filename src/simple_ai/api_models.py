@@ -35,7 +35,7 @@ class ChatCompletionInput(BaseModel):
     max_tokens:         int=7 
     presence_penalty:   float=0.
     frequence_penalty:  float=0.
-    logit_bias:         dict={}
+    logit_bias:         Optional[dict]={}
     user:               str=''
 
 class InstructionInput(BaseModel):
