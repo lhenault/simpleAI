@@ -75,10 +75,14 @@ async def chat_complete(
         Body(example=dummy_chat)
     ]
 ):
-    llm = get_model(model_id=body.model)
-    input_text = format_chat_log(chat=body.messages)
-    predictions = llm.complete(
-        prompt=input_text,
+    llm = get_model(model_id=body.mode, task='chat')
+    predictions = llm.chat(
+        messages=[
+            [
+                message.get('role', ''), message.get('content', '')
+            ]
+            for message in body.messages
+        ],
         temperature=body.temperature,
         top_p=body.top_p,
         n=body.n,
