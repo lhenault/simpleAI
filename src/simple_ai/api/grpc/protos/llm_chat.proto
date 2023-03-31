@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.chat";
+option java_outer_classname = "LanguageModelChat";
+option objc_class_prefix = "chat";
+
+package languagemodelchat;
+
+// Interface exported by the server.
+service LanguageModel {
+  // Simple RPC
+  rpc Chat(ChatLogInput) returns (ChatLogOutput) {}
+}
+
+// Chat Log Input
+message ChatLogInput {
+  repeated Chat messages  = 1;
+
+  int32 max_tokens        = 2;
+  float temperature       = 3;
+
+  float top_p             = 4;
+  int32 n                 = 5;
+  bool stream             = 6;
+
+  string stop             = 7;
+
+  float presence_penalty  = 8;
+  float frequence_penalty = 9;
+
+  string logit_bias       = 10;
+}
+
+message ChatLogOutput {
+  repeated Chat messages = 1;
+}
+
+// Chat message
+message Chat {
+  string role = 1;
+  string content = 2;
+}
