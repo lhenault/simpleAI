@@ -4,9 +4,9 @@ import tomllib
 from typing import Union
 from dataclasses import dataclass
 
-from .api.grpc.python.completion import client as lm_client
-from .api.grpc.python.chat import client as chat_client
-from .api.grpc.python.embedding import client as embed_client
+from .api.grpc.completion import client as lm_client
+from .api.grpc.chat import client as chat_client
+from .api.grpc.embedding import client as embed_client
 
 path = pathlib.Path(os.environ.get('SIMPLEAI_CONFIG_PATH', 'models.toml'))
 with path.open(mode='rb') as fp:
