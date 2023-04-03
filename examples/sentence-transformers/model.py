@@ -2,8 +2,6 @@ import logging
 from dataclasses import dataclass
 
 from sentence_transformers import SentenceTransformer
-from simple_ai.serve.python.embedding.model import LanguageModel
-
 
 from get_models import MODEL_ID
 

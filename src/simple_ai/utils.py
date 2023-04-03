@@ -94,5 +94,5 @@ def add_instructions(instructions: str,  text: str) -> str:
 def format_chat_log(chat: list[dict[str, str]]=dict()) -> str:
     raw_chat_text = ''
     for item in chat:
-        raw_chat_text += f"{item.get('role')}: {item.get('role')}\n"
+        raw_chat_text += f"{item.get('role')}: {item.get('content')}\n"
     return raw_chat_text

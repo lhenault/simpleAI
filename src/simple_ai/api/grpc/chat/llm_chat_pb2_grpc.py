@@ -2,8 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from . import llm_embed_pb2 as llm__embed__pb2
-
+from . import llm_chat_pb2 as llm__chat__pb2
 
 class LanguageModelStub(object):
     """Interface exported by the server.
@@ -15,10 +14,10 @@ class LanguageModelStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Embed = channel.unary_unary(
-                '/languagemodelembeddings.LanguageModel/Embed',
-                request_serializer=llm__embed__pb2.Sentences.SerializeToString,
-                response_deserializer=llm__embed__pb2.ListOfEmbeddings.FromString,
+        self.Chat = channel.unary_unary(
+                '/languagemodelchat.LanguageModel/Chat',
+                request_serializer=llm__chat__pb2.ChatLogInput.SerializeToString,
+                response_deserializer=llm__chat__pb2.ChatLogOutput.FromString,
                 )
 
 
@@ -26,7 +25,7 @@ class LanguageModelServicer(object):
     """Interface exported by the server.
     """
 
-    def Embed(self, request, context):
+    def Chat(self, request, context):
         """Simple RPC
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -36,14 +35,14 @@ class LanguageModelServicer(object):
 
 def add_LanguageModelServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Embed': grpc.unary_unary_rpc_method_handler(
-                    servicer.Embed,
-                    request_deserializer=llm__embed__pb2.Sentences.FromString,
-                    response_serializer=llm__embed__pb2.ListOfEmbeddings.SerializeToString,
+            'Chat': grpc.unary_unary_rpc_method_handler(
+                    servicer.Chat,
+                    request_deserializer=llm__chat__pb2.ChatLogInput.FromString,
+                    response_serializer=llm__chat__pb2.ChatLogOutput.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'languagemodelembeddings.LanguageModel', rpc_method_handlers)
+            'languagemodelchat.LanguageModel', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -53,7 +52,7 @@ class LanguageModel(object):
     """
 
     @staticmethod
-    def Embed(request,
+    def Chat(request,
             target,
             options=(),
             channel_credentials=None,
@@ -63,8 +62,8 @@ class LanguageModel(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/languagemodelembeddings.LanguageModel/Embed',
-            llm__embed__pb2.Sentences.SerializeToString,
-            llm__embed__pb2.ListOfEmbeddings.FromString,
+        return grpc.experimental.unary_unary(request, target, '/languagemodelchat.LanguageModel/Chat',
+            llm__chat__pb2.ChatLogInput.SerializeToString,
+            llm__chat__pb2.ChatLogOutput.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

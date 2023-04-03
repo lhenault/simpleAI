@@ -55,7 +55,7 @@ To expose for instance an embedding model in Python, you simply have to import a
 import logging
 from dataclasses import dataclass
 
-from simple_ai.serve.python.embedding.server import serve, LanguageModelServicer
+from simple_ai.api.grpc.embedding.server import serve, LanguageModelServicer
 
 @dataclass(unsafe_hash=True)
 class EmbeddingModel:
@@ -74,7 +74,7 @@ For a completion task, follow the same logic, but import `from simple_ai.serve.p
 
 ### Declaring a model
 
-To add a model, you first need to deploy a gRPC service (using the provided `.proto` file and / or the templates provided in `src/serve`). Once your model is live, you only have to add it to the `models.toml` configuration file. For instance, let's say you've locally deployed a [llama.cpp](https://github.com/ggerganov/llama.cpp) model available on port 50051, just add:
+To add a model, you first need to deploy a gRPC service (using the provided `.proto` file and / or the tools provided in `src/api/`). Once your model is live, you only have to add it to the `models.toml` configuration file. For instance, let's say you've locally deployed a [llama.cpp](https://github.com/ggerganov/llama.cpp) model available on port 50051, just add:
 
 ```toml
 [llama-7B-4b]

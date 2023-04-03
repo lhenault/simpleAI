@@ -4,8 +4,9 @@ import tomllib
 from typing import Union
 from dataclasses import dataclass
 
-from .clients.completion import client as lm_client
-from .clients.embedding import client as embed_client
+from .api.grpc.completion import client as lm_client
+from .api.grpc.chat import client as chat_client
+from .api.grpc.embedding import client as embed_client
 
 path = pathlib.Path(os.environ.get('SIMPLEAI_CONFIG_PATH', 'models.toml'))
 with path.open(mode='rb') as fp:
@@ -53,11 +54,44 @@ class RpcEmbeddingLanguageModel:
             inputs=inputs
         )
 
+@dataclass(unsafe_hash=True)
+class RpcChatLanguageModel:
+    name: str
+    url: str
+
+    def chat(self, 
+        messages:           list[list[str]]=[],
+        max_tokens:         int=64, 
+        temperature:        float=1.,
+        top_p:              float=1.,
+        n:                  int=1,
+        stream:             bool=False,
+        stop:               Union[str, list]='',
+        presence_penalty:   float=0.,
+        frequence_penalty:  float=0.,
+        logit_bias:         dict={},
+        
+    ) -> str:
+        return chat_client.run(
+            url=self.url,
+            messages=messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            top_p=top_p,
+            n=n,
+            stream=stream,
+            stop=stop,
+            presence_penalty=presence_penalty,
+            frequence_penalty=frequence_penalty,
+            logit_bias=logit_bias
+        )
 
 def select_model_type(model_interface: str='gRPC', task: str='complete'):
     if model_interface == 'gRPC':
         if task == 'embed':
             return RpcEmbeddingLanguageModel
+        if task == 'chat':
+            return RpcChatLanguageModel
         return RpcCompletionLanguageModel
     return RpcCompletionLanguageModel
 

@@ -1,6 +1,6 @@
 import logging
 
-from simple_ai.serve.python.completion.server import serve, LanguageModelServicer
+from simple_ai.api.grpc.completion.server import serve, LanguageModelServicer
 
 from model import AlpacaModel as Model
 
