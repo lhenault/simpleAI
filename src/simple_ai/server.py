@@ -6,7 +6,7 @@ from .models import get_model, list_models, get_model_infos
 from .utils import (
     format_autocompletion_response, 
     add_instructions, format_edits_response, 
-    format_chat_log, format_chat_response,
+    format_chat_response,
     format_embeddings_results
 )
 
