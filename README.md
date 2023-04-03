@@ -55,7 +55,7 @@ To expose for instance an embedding model in Python, you simply have to import a
 import logging
 from dataclasses import dataclass
 
-from simple_ai.api.python.grpc.embedding.server import serve, LanguageModelServicer
+from simple_ai.api.grpc.embedding.server import serve, LanguageModelServicer
 
 @dataclass(unsafe_hash=True)
 class EmbeddingModel:
