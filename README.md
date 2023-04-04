@@ -132,6 +132,17 @@ completion = openai.Completion.create(model="llama-7B", prompt="Hello everyone t
 
 This is very much work in progress and far from being perfect, so let me know if you want to help. PR, issues, documentation, cool logo, all the usual candidates are welcome.
 
+### Development Environment
+
+In order for the following steps to work it is required to have make and poetry installed on your system.
+
+To install the development environment run 
+```
+make install-dev 
+```
+
+This will install all dev dependencies as well as configure you're pre-commit helpers.
+
 ## License
 
 MIT License

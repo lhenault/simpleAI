@@ -10,19 +10,20 @@ packages = [{include = "src/simple_ai"}]
 python = "^3.8"
 fastapi= "^0.94.1"
 grpcio= "^1.51.3"
-grpcio-tools= "^1.51.3"
 uvicorn= "^0.21.0"
 
 [tool.poetry.scripts]
 simple_ai = 'simple_ai.__main__:main'
 
 [tool.poetry.group.dev.dependencies]
-poetry = "^1.4.1"
 ruff = "^0.0.260"
 black = "^23.3.0"
+pre-commit = "^3.2.2"
+poetry = "^1.4.1"
+grpcio-tools= "^1.51.3"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.1.0b3"]
 build-backend = "poetry.core.masonry.api"
 
 # ########################
