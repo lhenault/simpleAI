@@ -1,0 +1,187 @@
+[tool.poetry]
+name = "simple_ai_server"
+version = "0.1.9"
+description = ""
+authors = ["Louis Hénault"]
+readme = "README.md"
+packages = [{include = "src/simple_ai"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi= "^0.94.1"
+grpcio= "^1.51.3"
+uvicorn= "^0.21.0"
+
+[tool.poetry.scripts]
+simple_ai = 'simple_ai.__main__:main'
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.260"
+black = "^23.3.0"
+pre-commit = "^3.2.2"
+poetry = "^1.4.1"
+grpcio-tools= "^1.51.3"
+
+[build-system]
+requires = ["poetry-core>=1.1.0b3"]
+build-backend = "poetry.core.masonry.api"
+
+# ########################
+# ##### BLACK
+# ########################
+
+# [Docs root]
+#   https://black.readthedocs.io/en/stable/
+# [Config option reference]
+#   https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#command-line-options
+
+[tool.black]
+line-length = 100
+
+# Enable "preview" mode-- this adds style rules likely to be incorporated into black's next major
+# release. The reason for enabling this, as of 2022-12-04, is to turn on formatting of long string
+# literals.
+preview = true
+
+# Black will refuse to run if it's not this version.
+required-version = "23.3.0"
+
+# Ensure black's output will be compatible with all listed versions.
+target-version = ['py37', 'py38', 'py39', 'py310', 'py311']
+
+# ########################
+# ##### RUFF
+# ########################
+
+# [Docs root]
+#   https://github.com/charliermarsh/ruff#ruff
+# [Config option reference]
+#   https://github.com/charliermarsh/ruff#reference
+#
+# As of 2022-12-05, the entire documentation of Ruff is in its very long
+# README.
+
+[tool.ruff]
+# Don't format auto-generated gRPC files
+extend-exclude = ["src/simple_ai/api/grpc/**/*.py*"]
+
+ignore = [
+
+  "D101",
+  "D102",
+  "D103",
+  "D104",
+  "D105",
+  "D106",
+  "D107",
+
+  # (docstring imperative mood) Overly restrictive.
+  "D401",
+
+  # (line too long): This fires for comments, which black won't wrap.
+  # Disabling until there is an autoformat solution available for comments.
+  "E501",
+
+  # (no type comparison): There are a few places where we use `== type(None)` which are more clear
+  # than the equivalent `isinstance` check.
+  'E721',
+
+  # (bare exception): There are many places where we want to catch a maximally generic exception.
+  'E722',
+
+  # (no assign lambda): existing code assigns lambdas in a few places. With black formatting
+  # requiring extra empty lines between defs, disallowing lambda assignment can make code less
+  # readable.
+  "E731",
+
+  # (no concatenation) Existing codebase has many concatentations, no reason to disallow them.
+  "RUF005",
+
+  ##### TEMPORARY DISABLES
+
+  # (assorted docstring rules) There are too many violations of these to enable
+  # right now, but we should enable after fixing the violations.
+  "D200",  # (one-line docstring should fit)
+  "D205",  # (blank line after summary)
+  "D417",  # (missing arg in docstring)
+  "D100",  # (missing docstring in public module)
+
+]
+
+# Match black. Note that this also checks comment line length, but black does not format comments.
+line-length = 100
+
+# By default, ruff only uses all "E" (pycodestyle) and "F" (pyflakes) rules.
+# Here we append to the defaults.
+select = [
+
+  # (flake8-builtins) detect shadowing of python builtin symbols by variables and arguments.
+  # Attributes are OK (which is why A003) is not included here.
+  "A001",
+  "A002",
+
+  # (useless expression): Expressions that aren't assigned to anything are typically bugs.
+  "B018",
+
+  # (pydocstyle) Docstring-related rules. A large subset of these are ignored by the
+  # "convention=google" setting, we set under tool.ruff.pydocstyle.
+  "D",
+
+  # (pycodestyle) use all pycodestyle rules
+  "E",
+
+  # (pyflakes) use all pyflakes rules
+  "F",
+
+  # (isort) detect improperly sorted imports
+  "I001",
+
+  # (pylint) use all pylint rules from categories "Convention", "Error", and "Warning" (ruff
+  # currently implements only a subset of pylint's rules)
+  "PLE",
+  "PLW",
+
+  # (no commented out code) keep commented out code blocks out of the codebase
+  # "ERA001",
+
+  # (ruff-specific) Enable all ruff-specific checks (i.e. not ports of
+  # functionality from an existing linter).
+  "RUF",
+
+  # (private member access) Flag access to `_`-prefixed symbols. By default the various special
+  # methods on `NamedTuple` are ignored (e.g. `_replace`).
+  "SLF001",
+
+  # (disallow print statements) keep debugging statements out of the codebase
+  "T20",
+
+  # (f-strings) use f-strings instead of .format()
+  "UP032",
+
+  # (invalid escape sequence) flag errant backslashes
+  "W605",
+]
+
+# Fail if Ruff is not running this version.
+required-version = "0.0.260"
+
+[tool.ruff.flake8-builtins]
+
+builtins-ignorelist = []
+
+[tool.ruff.isort]
+
+# Combine multiple `from foo import bar as baz` statements with the same source
+# (`foo`) into a single statement.
+combine-as-imports = true
+
+# Imports of the form `from foo import bar as baz` show one `import bar as baz`
+# per line. Useful for __init__.py files that just re-export symbols.
+force-wrap-aliases = true
+
+[tool.ruff.pydocstyle]
+
+# Enforce google-style docstrings. This is equivalent to ignoring a large number of pydocstyle (D)
+# rules incompatible with google-style docstrings. See:
+# https://google.github.io/styleguide/pyguide.html#383-functions-and-methods
+convention = "google"

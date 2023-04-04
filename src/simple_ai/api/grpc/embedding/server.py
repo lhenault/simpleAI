@@ -12,11 +12,11 @@ from .model import LanguageModel
 
 class LanguageModelServicer(llm_embed_pb2_grpc.LanguageModelServicer):
     """Provides methods that implement functionality of route guide server."""
-    
+
     def __init__(self, model=LanguageModel()) -> None:
         super().__init__()
         self.model = model
-    
+
     def Embed(self, request, context):
         embeddings = self.model.embed(
             inputs=request.inputs,
@@ -30,22 +30,21 @@ class LanguageModelServicer(llm_embed_pb2_grpc.LanguageModelServicer):
         return grpc_embeddings
 
 
-def serve(address='[::]:50051', model_servicer=LanguageModelServicer(), max_workers=10):
+def serve(address="[::]:50051", model_servicer=LanguageModelServicer(), max_workers=10):
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=max_workers))
-    llm_embed_pb2_grpc.add_LanguageModelServicer_to_server(
-        model_servicer, server)
+    llm_embed_pb2_grpc.add_LanguageModelServicer_to_server(model_servicer, server)
     server.add_insecure_port(address=address)
     server.start()
     server.wait_for_termination()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import argparse
-    
+
     logging.basicConfig()
-    
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('address', type=str, default='[::]:50051')
+    parser.add_argument("address", type=str, default="[::]:50051")
     args = parser.parse_args()
 
     serve(address=args.address)

@@ -6,8 +6,7 @@ from . import llm_pb2 as llm__pb2
 
 
 class LanguageModelStub(object):
-    """Interface exported by the server.
-    """
+    """Interface exported by the server."""
 
     def __init__(self, channel):
         """Constructor.
@@ -16,89 +15,110 @@ class LanguageModelStub(object):
             channel: A grpc.Channel.
         """
         self.Complete = channel.unary_unary(
-                '/languagemodel.LanguageModel/Complete',
-                request_serializer=llm__pb2.Message.SerializeToString,
-                response_deserializer=llm__pb2.Completions.FromString,
-                )
+            "/languagemodel.LanguageModel/Complete",
+            request_serializer=llm__pb2.Message.SerializeToString,
+            response_deserializer=llm__pb2.Completions.FromString,
+        )
         self.StreamComplete = channel.unary_stream(
-                '/languagemodel.LanguageModel/StreamComplete',
-                request_serializer=llm__pb2.Message.SerializeToString,
-                response_deserializer=llm__pb2.Completions.FromString,
-                )
+            "/languagemodel.LanguageModel/StreamComplete",
+            request_serializer=llm__pb2.Message.SerializeToString,
+            response_deserializer=llm__pb2.Completions.FromString,
+        )
 
 
 class LanguageModelServicer(object):
-    """Interface exported by the server.
-    """
+    """Interface exported by the server."""
 
     def Complete(self, request, context):
-        """Simple RPC.
-        """
+        """Simple RPC."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def StreamComplete(self, request, context):
-        """Server-to-client streaming RPC.
-        """
+        """Server-to-client streaming RPC."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_LanguageModelServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Complete': grpc.unary_unary_rpc_method_handler(
-                    servicer.Complete,
-                    request_deserializer=llm__pb2.Message.FromString,
-                    response_serializer=llm__pb2.Completions.SerializeToString,
-            ),
-            'StreamComplete': grpc.unary_stream_rpc_method_handler(
-                    servicer.StreamComplete,
-                    request_deserializer=llm__pb2.Message.FromString,
-                    response_serializer=llm__pb2.Completions.SerializeToString,
-            ),
+        "Complete": grpc.unary_unary_rpc_method_handler(
+            servicer.Complete,
+            request_deserializer=llm__pb2.Message.FromString,
+            response_serializer=llm__pb2.Completions.SerializeToString,
+        ),
+        "StreamComplete": grpc.unary_stream_rpc_method_handler(
+            servicer.StreamComplete,
+            request_deserializer=llm__pb2.Message.FromString,
+            response_serializer=llm__pb2.Completions.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'languagemodel.LanguageModel', rpc_method_handlers)
+        "languagemodel.LanguageModel", rpc_method_handlers
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class LanguageModel(object):
-    """Interface exported by the server.
-    """
+    """Interface exported by the server."""
 
     @staticmethod
-    def Complete(request,
+    def Complete(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/languagemodel.LanguageModel/Complete',
+            "/languagemodel.LanguageModel/Complete",
             llm__pb2.Message.SerializeToString,
             llm__pb2.Completions.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def StreamComplete(request,
+    def StreamComplete(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_stream(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/languagemodel.LanguageModel/StreamComplete',
+            "/languagemodel.LanguageModel/StreamComplete",
             llm__pb2.Message.SerializeToString,
             llm__pb2.Completions.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
