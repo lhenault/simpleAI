@@ -18,5 +18,5 @@ docker build . -t openchatkit-service:latest
 ## Start service
 
 ```bash
-docker run -it --rm --p 50051:50051 --gpus all openchatkit-service:latest
+docker run -it --rm -p 50051:50051 --gpus all openchatkit-service:latest
 ```

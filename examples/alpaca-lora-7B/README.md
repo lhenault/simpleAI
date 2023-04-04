@@ -13,5 +13,5 @@ docker build . -t alpaca-7b-service:latest
 ## Start service
 
 ```bash
-docker run -it --rm --p 50051:50051 --gpus all alpaca-7b-service:latest
+docker run -it --rm -p 50051:50051 --gpus all alpaca-7b-service:latest
 ```
