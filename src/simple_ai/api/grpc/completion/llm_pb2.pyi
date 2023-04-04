@@ -11,7 +11,22 @@ class Completions(_message.Message):
     def __init__(self, reply: _Optional[str] = ...) -> None: ...
 
 class Message(_message.Message):
-    __slots__ = ["best_of", "echo", "frequence_penalty", "logit_bias", "logprobs", "max_tokens", "n", "presence_penalty", "prompt", "stop", "stream", "suffix", "temperature", "top_p"]
+    __slots__ = [
+        "best_of",
+        "echo",
+        "frequence_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "n",
+        "presence_penalty",
+        "prompt",
+        "stop",
+        "stream",
+        "suffix",
+        "temperature",
+        "top_p",
+    ]
     BEST_OF_FIELD_NUMBER: _ClassVar[int]
     ECHO_FIELD_NUMBER: _ClassVar[int]
     FREQUENCE_PENALTY_FIELD_NUMBER: _ClassVar[int]
@@ -40,4 +55,20 @@ class Message(_message.Message):
     suffix: str
     temperature: float
     top_p: float
-    def __init__(self, prompt: _Optional[str] = ..., suffix: _Optional[str] = ..., max_tokens: _Optional[int] = ..., temperature: _Optional[float] = ..., top_p: _Optional[float] = ..., n: _Optional[int] = ..., stream: bool = ..., logprobs: _Optional[int] = ..., echo: bool = ..., stop: _Optional[str] = ..., presence_penalty: _Optional[float] = ..., frequence_penalty: _Optional[float] = ..., best_of: _Optional[int] = ..., logit_bias: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        prompt: _Optional[str] = ...,
+        suffix: _Optional[str] = ...,
+        max_tokens: _Optional[int] = ...,
+        temperature: _Optional[float] = ...,
+        top_p: _Optional[float] = ...,
+        n: _Optional[int] = ...,
+        stream: bool = ...,
+        logprobs: _Optional[int] = ...,
+        echo: bool = ...,
+        stop: _Optional[str] = ...,
+        presence_penalty: _Optional[float] = ...,
+        frequence_penalty: _Optional[float] = ...,
+        best_of: _Optional[int] = ...,
+        logit_bias: _Optional[str] = ...,
+    ) -> None: ...

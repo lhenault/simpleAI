@@ -20,48 +20,46 @@ def get_chatlog(stub, chatlog):
 
 
 def run(
-    url:                str='localhost:50051',
-    messages:           List[List[str]]=[],
-    max_tokens:         int=512, 
-    temperature:        float=1.,
-    top_p:              float=1.,
-    n:                  int=1,
-    stream:             bool=False,
-    stop:               Union[str, list]='',
-    presence_penalty:   float=0.,
-    frequence_penalty:  float=0.,
-    logit_bias:         dict={},
+    url: str = "localhost:50051",
+    messages: List[List[str]] = [],
+    max_tokens: int = 512,
+    temperature: float = 1.0,
+    top_p: float = 1.0,
+    n: int = 1,
+    stream: bool = False,
+    stop: Union[str, list] = "",
+    presence_penalty: float = 0.0,
+    frequence_penalty: float = 0.0,
+    logit_bias: dict = {},
 ):
     with grpc.insecure_channel(url) as channel:
-        stub    = llm_chat_pb2_grpc.LanguageModelStub(channel)
+        stub = llm_chat_pb2_grpc.LanguageModelStub(channel)
         grpc_chatlog = llm_chat_pb2.ChatLogInput(
             max_tokens=max_tokens,
             temperature=temperature,
-
             top_p=top_p,
             n=n,
             stream=stream,
-
             stop=str(stop),
             presence_penalty=presence_penalty,
             frequence_penalty=frequence_penalty,
-
-            logit_bias=str(logit_bias)
+            logit_bias=str(logit_bias),
         )
-        for (role, content) in messages:
+        for role, content in messages:
             grpc_chat = llm_chat_pb2.Chat(role=role, content=content)
             grpc_chatlog.messages.append(grpc_chat)
         return get_chatlog(stub, grpc_chatlog)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import argparse
     import logging
-    
+
     logging.basicConfig()
-    
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('--address', type=str, default='[::]:50051')
+    parser.add_argument("--address", type=str, default="[::]:50051")
     args = parser.parse_args()
 
-    res = run(messages=[['user', 'hello'] for _ in range(5)])
+    res = run(messages=[["user", "hello"] for _ in range(5)])
     print(res)

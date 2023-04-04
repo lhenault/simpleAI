@@ -6,8 +6,7 @@ from . import llm_embed_pb2 as llm__embed__pb2
 
 
 class LanguageModelStub(object):
-    """Interface exported by the server.
-    """
+    """Interface exported by the server."""
 
     def __init__(self, channel):
         """Constructor.
@@ -16,55 +15,65 @@ class LanguageModelStub(object):
             channel: A grpc.Channel.
         """
         self.Embed = channel.unary_unary(
-                '/languagemodelembeddings.LanguageModel/Embed',
-                request_serializer=llm__embed__pb2.Sentences.SerializeToString,
-                response_deserializer=llm__embed__pb2.ListOfEmbeddings.FromString,
-                )
+            "/languagemodelembeddings.LanguageModel/Embed",
+            request_serializer=llm__embed__pb2.Sentences.SerializeToString,
+            response_deserializer=llm__embed__pb2.ListOfEmbeddings.FromString,
+        )
 
 
 class LanguageModelServicer(object):
-    """Interface exported by the server.
-    """
+    """Interface exported by the server."""
 
     def Embed(self, request, context):
-        """Simple RPC
-        """
+        """Simple RPC"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_LanguageModelServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Embed': grpc.unary_unary_rpc_method_handler(
-                    servicer.Embed,
-                    request_deserializer=llm__embed__pb2.Sentences.FromString,
-                    response_serializer=llm__embed__pb2.ListOfEmbeddings.SerializeToString,
-            ),
+        "Embed": grpc.unary_unary_rpc_method_handler(
+            servicer.Embed,
+            request_deserializer=llm__embed__pb2.Sentences.FromString,
+            response_serializer=llm__embed__pb2.ListOfEmbeddings.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'languagemodelembeddings.LanguageModel', rpc_method_handlers)
+        "languagemodelembeddings.LanguageModel", rpc_method_handlers
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class LanguageModel(object):
-    """Interface exported by the server.
-    """
+    """Interface exported by the server."""
 
     @staticmethod
-    def Embed(request,
+    def Embed(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/languagemodelembeddings.LanguageModel/Embed',
+            "/languagemodelembeddings.LanguageModel/Embed",
             llm__embed__pb2.Sentences.SerializeToString,
             llm__embed__pb2.ListOfEmbeddings.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
