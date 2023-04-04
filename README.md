@@ -136,12 +136,12 @@ This is very much work in progress and far from being perfect, so let me know if
 
 In order for the following steps to work it is required to have make and poetry installed on your system.
 
-To install the development environment run 
+To install the development environment run:
 ```
 make install-dev 
 ```
 
-This will install all dev dependencies as well as configure you're pre-commit helpers.
+This will install all dev dependencies as well as configure your pre-commit helpers.
 
 ## License
 
