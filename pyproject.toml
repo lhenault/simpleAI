@@ -103,6 +103,7 @@ ignore = [
   "D200",  # (one-line docstring should fit)
   "D205",  # (blank line after summary)
   "D417",  # (missing arg in docstring)
+  "D100",  # (missing docstring in public module)
 
 ]
 
