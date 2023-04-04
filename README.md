@@ -70,7 +70,7 @@ if __name__ == '__main__':
     serve(address='[::]:50051', model_servicer=model_servicer)
 ```
 
-For a completion task, follow the same logic, but import `from simple_ai.serve.python.completion.server` instead, and implements a `complete` method.
+For a completion task, follow the same logic, but import `from simple_ai.api.grpc.completion.server` instead, and implements a `complete` method.
 
 ### Declaring a model
 
