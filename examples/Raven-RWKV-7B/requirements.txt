@@ -5,7 +5,7 @@ pynvml==11.5.0
 rwkv==0.6.2
 scipy==1.10.1
 sentencepiece==0.1.97
-simple-ai-server @ git+https://git@github.com/lhenault/simpleAI.git@7b429c72d397c3cf3c9114c7c5749dee5403594b#subdirectory=src
+simple-ai-server @ git+https://git@github.com/lhenault/simpleAI.git@0a441cc7f83324895564321657dadafc38e6647c
 tokenizers==0.13.2
 torch==2.0.0
 transformers==4.27.3

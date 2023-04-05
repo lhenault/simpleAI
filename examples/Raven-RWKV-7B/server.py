@@ -1,8 +1,8 @@
 import logging
 
-from model import OpenChatModel as Model
+from simple_ai.api.grpc.chat.server import LanguageModelServicer, serve
+from model import RavenRWKVModel as Model
 
-from simple_ai.serve.python.completion.server import LanguageModelServicer, serve
 
 if __name__ == '__main__':
     import argparse

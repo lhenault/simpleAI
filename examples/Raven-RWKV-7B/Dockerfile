@@ -9,8 +9,8 @@ RUN pip install --upgrade pip setuptools wheel
 # Create user instead of using root
 ENV USER='user'
 RUN groupadd -r user && useradd -r -g $USER $USER
-RUN mkdir /home/$USER
-RUN chown $USER:$USER /home/$USER
+RUN mkdir -p /home/$USER/app
+RUN chown -R $USER:$USER /home/$USER
 USER $USER
 
 # Define workdir

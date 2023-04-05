@@ -8,6 +8,8 @@ RWKV is an RNN with Transformer-level language model performance that can be tra
 
 ## Build
 
+Note: requires a GPU and [setting the default runtime to nvidia](https://stackoverflow.com/a/61737404/8083679)
+
 ```bash
 docker build . -t raven-rwkv-service:latest
 ```
@@ -15,9 +17,23 @@ docker build . -t raven-rwkv-service:latest
 ## Start service
 
 ```bash
-docker run -it --rm --p 50051:50051 --gpus all raven-rwkv-service:latest
+docker run -it --rm -p 50051:50051 --gpus all raven-rwkv-service:latest
 ```
 
+## Add to model.toml
+
+```
+```toml
+[raven]
+    [raven.metadata]
+        owned_by    = 'BlinkDL'
+        permission  = []
+        description = 'RWKV fine tuned for instruction answering'
+    [raven.network]
+        url = 'localhost:50051'
+```
+
+```
 
 ## Credits
 

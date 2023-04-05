@@ -20,7 +20,15 @@ logger = logging.getLogger(__file__)
 nvmlInit()
 gpu_h = nvmlDeviceGetHandleByIndex(0)
 ctx_limit = 1024
-title = "RWKV-4-Pile-7B-Instruct-test4-20230326"
+
+models = {
+    'raven-14b-ctx4096': {'repo_id': 'BlinkDL/rwkv-4-raven', 'title': "RWKV-4-Raven-14B-v6-Eng-20230401-ctx4096"},
+    'raven-7b-ctx1024': {'repo_id': 'BlinkDL/rwkv-4-pile-7b', 'title': "RWKV-4-Pile-7B-Instruct-test4-20230326"},
+
+}
+
+model = "raven-7b-ctx1024"
+model_params = models[model]
 
 def fetch_tokenizer(tokenizer_path: Path):
     url = "https://huggingface.co/spaces/BlinkDL/Raven-RWKV-7B/raw/main/20B_tokenizer.json"
@@ -31,12 +39,13 @@ def fetch_tokenizer(tokenizer_path: Path):
 
 def get_model():
 
-    model_path = hf_hub_download(repo_id="BlinkDL/rwkv-4-pile-7b", filename=f"{title}.pth")
-    model = RWKV(model=model_path, strategy='cuda fp16i8 *10 -> cuda fp16')
-
     tokenizer_path = Path(__file__).parent / "20B_tokenizer.json"
     if not tokenizer_path.exists():
         fetch_tokenizer(tokenizer_path)
+        
+    model_path = hf_hub_download(repo_id=model_params['repo_id'], filename=f"{model_params['title']}.pth")
+    model = RWKV(model=model_path, strategy='cuda fp16i8 *10 -> cuda fp16')
+
 
     pipeline = PIPELINE(model, str(tokenizer_path))
 
@@ -82,8 +91,6 @@ def chat(
                      token_ban = [], # ban the generation of some tokens
                      token_stop = [0]) # stop generation whenever you see any token here
 
-    instruction = instruction.strip()
-    input = input.strip()
     ctx = generate_prompt(instruction, input)
 
     gpu_info = nvmlDeviceGetMemoryInfo(gpu_h)
