@@ -21,7 +21,7 @@ Well first of all it's a fun little project, and perhaps a better use of my time
 
 ## Installation
 
-On a machine with Python 3.8+:
+On a machine with Python 3.9+:
 
 ```bash
 pip install simple_ai_server
@@ -84,6 +84,7 @@ To add a model, you first need to deploy a gRPC service (using the provided `.pr
         description = 'C++ implementation of LlaMA model, 7B parameters, 4-bit quantization'
     [llama-7B-4b.network]
         url = 'localhost:50051'
+        type = 'gRPC'
 ```
 
 You can see see and try of the provided examples in `examples/` directory (might require GPU).

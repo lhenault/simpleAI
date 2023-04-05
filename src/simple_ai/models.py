@@ -1,9 +1,13 @@
+import sys
 import os
 import pathlib
 from dataclasses import dataclass
 from typing import Union
 
-import tomllib
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
 
 from .api.grpc.chat import client as chat_client
 from .api.grpc.completion import client as lm_client
