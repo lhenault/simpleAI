@@ -7,10 +7,11 @@ readme = "README.md"
 packages = [{include = "src/simple_ai"}]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 fastapi= "^0.94.1"
 grpcio= "^1.51.3"
 uvicorn= "^0.21.0"
+tomli= {version = "^2.0.1", python = "<3.11"}
 
 [tool.poetry.scripts]
 simple_ai = 'simple_ai.__main__:main'
