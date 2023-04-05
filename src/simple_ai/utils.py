@@ -74,10 +74,10 @@ def format_chat_response(model_name: str, predictions, usage=dummy_usage) -> dic
             {
                 "role": "assistant",
                 "index": idx,
-                "message": {"role": "assistant", "content": text},
+                "message": message,
                 "finish_reason": "stop",
             }
-            for idx, text in enumerate(predictions)
+            for idx, message in enumerate(predictions)
         ],
         "usage": usage,
     }
