@@ -19,20 +19,31 @@ logger = logging.getLogger(__file__)
 
 nvmlInit()
 gpu_h = nvmlDeviceGetHandleByIndex(0)
-ctx_limit = 1024
+ctx_limit = 4096
 
 models = {
     "raven-14b-ctx4096": {
         "repo_id": "BlinkDL/rwkv-4-raven",
         "title": "RWKV-4-Raven-14B-v6-Eng-20230401-ctx4096",
     },
+    "raven-7b-ctx4096": {
+        "repo_id": "BlinkDL/rwkv-4-raven",
+        "title": "RWKV-4-Raven-7B-v7-Eng-20230404-ctx4096",
+    },
     "raven-7b-ctx1024": {
         "repo_id": "BlinkDL/rwkv-4-pile-7b",
         "title": "RWKV-4-Pile-7B-Instruct-test4-20230326",
     },
+    "rwkv-4-pile-169m": {
+        "repo_id": "BlinkDL/rwkv-4-pile-169m",
+        "title": "RWKV-4-Pile-169M-20220807-8023",
+    },
 }
 
-model = "raven-7b-ctx1024"
+model = "raven-14b-ctx4096"
+# model = "raven-7b-ctx1024"
+# model = "raven-7b-ctx4096"
+# model = "rwkv-4-pile-169m"
 model_params = models[model]
 
 
@@ -52,7 +63,9 @@ def get_model():
     model_path = hf_hub_download(
         repo_id=model_params["repo_id"], filename=f"{model_params['title']}.pth"
     )
-    model = RWKV(model=model_path, strategy="cuda fp16i8 *10 -> cuda fp16")
+
+    model = RWKV(model=model_path, strategy="cuda fp16i8 *0+ -> cpu fp32 *1")  # stream mode
+    # model = RWKV(model=model_path, strategy="cuda fp16i8 *10 -> cuda fp16")
 
     pipeline = PIPELINE(model, str(tokenizer_path))
 
@@ -135,3 +148,32 @@ def chat(
             out_last = i + 1
     gc.collect()
     torch.cuda.empty_cache()
+
+
+def embedding(
+    inputs: list[str],
+    model,
+    pipeline,
+    prompt="",
+    token_count=200,
+    temperature=1.0,
+    top_p=0.7,
+    presencePenalty=0.1,
+    countPenalty=0.1,
+):
+    PIPELINE_ARGS(
+        temperature=max(0.2, float(temperature)),
+        top_p=float(top_p),
+        alpha_frequency=countPenalty,
+        alpha_presence=presencePenalty,
+        token_ban=[],  # ban the generation of some tokens
+        token_stop=[0],
+    )  # stop generation whenever you see any token here
+
+    gpu_info = nvmlDeviceGetMemoryInfo(gpu_h)
+    logger.debug(f"vram {gpu_info.total} used {gpu_info.used} free {gpu_info.free}")
+
+    context = [pipeline.encode(ctx)[-ctx_limit:] for ctx in inputs]
+    _, state = model.forward(context[0], None)
+
+    raise state
