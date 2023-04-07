@@ -24,7 +24,7 @@ ctx_limit = 4096
 models = {
     "raven-14b-ctx4096": {
         "repo_id": "BlinkDL/rwkv-4-raven",
-        "title": "RWKV-4-Raven-14B-v6-Eng-20230401-ctx4096",
+        "title": "RWKV-4-Raven-14B-v8-Eng-20230408-ctx4096",
     },
     "raven-7b-ctx4096": {
         "repo_id": "BlinkDL/rwkv-4-raven",
@@ -64,7 +64,10 @@ def get_model():
         repo_id=model_params["repo_id"], filename=f"{model_params['title']}.pth"
     )
 
-    model = RWKV(model=model_path, strategy="cuda fp16i8 *0+ -> cpu fp32 *1")  # stream mode
+    model = RWKV(
+        model=model_path, strategy="cuda fp16i8 *40 -> cuda fp16i8 *0+ -> cpu fp32 *1"
+    )  # stream mode w/some static
+    # model = RWKV(model=model_path, strategy="cuda fp16i8 *0+ -> cpu fp32 *1")  # stream mode
     # model = RWKV(model=model_path, strategy="cuda fp16i8 *10 -> cuda fp16")
 
     pipeline = PIPELINE(model, str(tokenizer_path))
@@ -116,7 +119,7 @@ def chat(
         token_stop=[0],
     )  # stop generation whenever you see any token here
 
-    ctx = generate_prompt(instruction, prompt)
+    ctx = instruction
 
     gpu_info = nvmlDeviceGetMemoryInfo(gpu_h)
     logger.debug(f"vram {gpu_info.total} used {gpu_info.used} free {gpu_info.free}")
@@ -154,9 +157,7 @@ def embedding(
     inputs: list[str],
     model,
     pipeline,
-    prompt="",
-    token_count=200,
-    temperature=1.0,
+    temperature=1.0,  # TODO remove
     top_p=0.7,
     presencePenalty=0.1,
     countPenalty=0.1,
@@ -175,5 +176,61 @@ def embedding(
 
     context = [pipeline.encode(ctx)[-ctx_limit:] for ctx in inputs]
     _, state = model.forward(context[0], None)
+    *_, embedding = state
 
-    raise state
+    if len(embedding.shape) == 1:
+        embedding = embedding.unsqueeze(0)
+    return embedding
+
+
+def complete(
+    prompt,
+    model,
+    pipeline,
+    token_count=200,
+    temperature=1.0,
+    top_p=0.7,
+    presencePenalty=0.1,
+    countPenalty=0.1,
+):
+    args = PIPELINE_ARGS(
+        temperature=max(0.2, float(temperature)),
+        top_p=float(top_p),
+        alpha_frequency=countPenalty,
+        alpha_presence=presencePenalty,
+        token_ban=[],  # ban the generation of some tokens
+        token_stop=[0],
+    )  # stop generation whenever you see any token here
+
+    ctx = prompt
+
+    gpu_info = nvmlDeviceGetMemoryInfo(gpu_h)
+    logger.debug(f"vram {gpu_info.total} used {gpu_info.used} free {gpu_info.free}")
+
+    all_tokens = []
+    out_last = 0
+    out_str = ""
+    occurrence = {}
+    state = None
+    token = None
+    for i in range(int(token_count)):
+        out, state = model.forward(pipeline.encode(ctx)[-ctx_limit:] if i == 0 else [token], state)
+        for n in occurrence:
+            out[n] -= args.alpha_presence + occurrence[n] * args.alpha_frequency
+
+        token = pipeline.sample_logits(out, temperature=args.temperature, top_p=args.top_p)
+        if token in args.token_stop:
+            break
+        all_tokens += [token]
+        if token not in occurrence:
+            occurrence[token] = 1
+        else:
+            occurrence[token] += 1
+
+        tmp = pipeline.decode(all_tokens[out_last:])
+        if "\ufffd" not in tmp:
+            out_str += tmp
+            yield tmp
+            out_last = i + 1
+    gc.collect()
+    torch.cuda.empty_cache()
