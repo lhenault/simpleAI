@@ -72,7 +72,6 @@ def format_chat_response(model_name: str, predictions, usage=dummy_usage) -> dic
         "created": current_timestamp,
         "choices": [
             {
-                "role": "assistant",
                 "index": idx,
                 "message": message,
                 "finish_reason": "stop",
