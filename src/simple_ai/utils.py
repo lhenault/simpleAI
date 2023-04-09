@@ -41,7 +41,26 @@ def format_autocompletion_stream_response(
     return data
 
 
-def format_edits_response(model_name, predictions, usage=dummy_usage) -> dict:
+def format_autocompletion_stream_response(
+    current_timestamp, response_id, model_name, predictions
+) -> dict:
+    data = {
+        "id": response_id,
+        "object": "text_completion",
+        "created": current_timestamp,
+        "model": model_name,
+        "choices": [
+            {"text": text, "index": idx, "logprobs": None, "finish_reason": ""}
+            for idx, text in enumerate(predictions)
+        ],
+    }
+
+    data = f"DATA: {data}\n\n"
+
+    return data
+
+
+def format_edits_response(model_name, predictions) -> dict:
     response_id = uuid.uuid4()
     current_timestamp = int(dt.now().timestamp())
 
