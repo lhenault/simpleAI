@@ -37,7 +37,7 @@ class LanguageModelServicer(llm_pb2_grpc.LanguageModelServicer):
         return llm_pb2.Completions(reply=predicted)
 
     def StreamComplete(self, request, context):
-        predicted = self.model.complete(
+        predicted_stream = self.model.stream_complete(
             prompt=request.prompt,
             suffix=request.suffix,
             max_tokens=request.max_tokens,
@@ -53,7 +53,7 @@ class LanguageModelServicer(llm_pb2_grpc.LanguageModelServicer):
             best_of=request.best_of,
             logit_bias=request.logit_bias,
         )
-        return llm_pb2.Completions(reply=predicted)
+        yield from map(lambda predicted: llm_pb2.Completions(reply=predicted), predicted_stream)
 
 
 def serve(address="[::]:50051", model_servicer=LanguageModelServicer(), max_workers=10):

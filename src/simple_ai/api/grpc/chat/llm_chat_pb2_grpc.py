@@ -19,6 +19,11 @@ class LanguageModelStub(object):
             request_serializer=llm__chat__pb2.ChatLogInput.SerializeToString,
             response_deserializer=llm__chat__pb2.ChatLogOutput.FromString,
         )
+        self.Stream = channel.unary_stream(
+            "/languagemodelchat.LanguageModel/Stream",
+            request_serializer=llm__chat__pb2.ChatLogInput.SerializeToString,
+            response_deserializer=llm__chat__pb2.ChatLogOutput.FromString,
+        )
 
 
 class LanguageModelServicer(object):
@@ -30,11 +35,22 @@ class LanguageModelServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
+    def Stream(self, request, context):
+        """Server-to-client streaming RPC."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
 
 def add_LanguageModelServicer_to_server(servicer, server):
     rpc_method_handlers = {
         "Chat": grpc.unary_unary_rpc_method_handler(
             servicer.Chat,
+            request_deserializer=llm__chat__pb2.ChatLogInput.FromString,
+            response_serializer=llm__chat__pb2.ChatLogOutput.SerializeToString,
+        ),
+        "Stream": grpc.unary_stream_rpc_method_handler(
+            servicer.Stream,
             request_deserializer=llm__chat__pb2.ChatLogInput.FromString,
             response_serializer=llm__chat__pb2.ChatLogOutput.SerializeToString,
         ),
@@ -66,6 +82,35 @@ class LanguageModel(object):
             request,
             target,
             "/languagemodelchat.LanguageModel/Chat",
+            llm__chat__pb2.ChatLogInput.SerializeToString,
+            llm__chat__pb2.ChatLogOutput.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def Stream(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            "/languagemodelchat.LanguageModel/Stream",
             llm__chat__pb2.ChatLogInput.SerializeToString,
             llm__chat__pb2.ChatLogOutput.FromString,
             options,

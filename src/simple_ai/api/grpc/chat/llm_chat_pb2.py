@@ -20,10 +20,11 @@ DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
     b" \x01(\x08\x12\x0c\n\x04stop\x18\x07 \x01(\t\x12\x18\n\x10presence_penalty\x18\x08"
     b" \x01(\x02\x12\x19\n\x11\x66requence_penalty\x18\t \x01(\x02\x12\x12\n\nlogit_bias\x18\n"
     b' \x01(\t":\n\rChatLogOutput\x12)\n\x08messages\x18\x01'
-    b' \x03(\x0b\x32\x17.languagemodelchat.Chat"%\n\x04\x43hat\x12\x0c\n\x04role\x18\x01'
-    b" \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02"
-    b" \x01(\t2\\\n\rLanguageModel\x12K\n\x04\x43hat\x12\x1f.languagemodelchat.ChatLogInput\x1a"
-    b' .languagemodelchat.ChatLogOutput"\x00\x42\x33\n\x15io.grpc.examples.chatB\x11LanguageModelChatP\x01\xa2\x02\x04\x63hatb\x06proto3'
+    b' \x03(\x0b\x32\x17.languagemodelchat.Chat"D\n\x04\x43hat\x12\x11\n\x04role\x18\x01'
+    b" \x01(\tH\x00\x88\x01\x01\x12\x14\n\x07\x63ontent\x18\x02"
+    b" \x01(\tH\x01\x88\x01\x01\x42\x07\n\x05_roleB\n\n\x08_content2\xad\x01\n\rLanguageModel\x12K\n\x04\x43hat\x12\x1f.languagemodelchat.ChatLogInput\x1a"
+    b' .languagemodelchat.ChatLogOutput"\x00\x12O\n\x06Stream\x12\x1f.languagemodelchat.ChatLogInput\x1a'
+    b' .languagemodelchat.ChatLogOutput"\x00\x30\x01\x42\x33\n\x15io.grpc.examples.chatB\x11LanguageModelChatP\x01\xa2\x02\x04\x63hatb\x06proto3'
 )
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
@@ -38,7 +39,7 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     _CHATLOGOUTPUT._serialized_start = 267
     _CHATLOGOUTPUT._serialized_end = 325
     _CHAT._serialized_start = 327
-    _CHAT._serialized_end = 364
-    _LANGUAGEMODEL._serialized_start = 366
-    _LANGUAGEMODEL._serialized_end = 458
+    _CHAT._serialized_end = 395
+    _LANGUAGEMODEL._serialized_start = 398
+    _LANGUAGEMODEL._serialized_end = 571
 # @@protoc_insertion_point(module_scope)

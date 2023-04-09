@@ -11,6 +11,9 @@ package languagemodelchat;
 service LanguageModel {
   // Simple RPC
   rpc Chat(ChatLogInput) returns (ChatLogOutput) {}
+
+  // Server-to-client streaming RPC.
+  rpc Stream(ChatLogInput) returns (stream ChatLogOutput) {}
 }
 
 // Chat Log Input
@@ -36,8 +39,9 @@ message ChatLogOutput {
   repeated Chat messages = 1;
 }
 
+
 // Chat message
 message Chat {
-  string role = 1;
-  string content = 2;
+  optional string role = 1;
+  optional string content = 2;
 }
