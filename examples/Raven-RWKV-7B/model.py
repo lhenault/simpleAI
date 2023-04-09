@@ -50,6 +50,16 @@ class RavenRWKVModel(LanguageModel):
 
     def complete(
         self,
+        *args,
+        **kwargs,
+    ) -> str:
+        output = self.stream_complete(*args, **kwargs)
+        output = "".join(output)
+
+        return output
+
+    def stream_complete(
+        self,
         prompt: str = None,
         max_tokens: int = 512,
         temperature: float = 0.9,
@@ -59,21 +69,17 @@ class RavenRWKVModel(LanguageModel):
         *args,
         **kwargs,
     ) -> str:
-        output = lib_raven.chat(
+        output = lib_raven.complete(
             prompt,
             self.model,
             self.pipeline,
-            prompt=None,
             token_count=max_tokens,
             temperature=temperature,
             top_p=top_p,
             presencePenalty=presencePenalty,
             countPenalty=countPenalty,
         )
-
-        output = "".join(output)
-
-        return output
+        yield from output
 
     def stream(
         self,
