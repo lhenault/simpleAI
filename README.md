@@ -26,7 +26,7 @@ On a machine with Python 3.9+:
 - From source:
 
 ```bash
-pip install git+git+https://github.com/lhenault/simpleAI 
+pip install git+https://github.com/lhenault/simpleAI 
 ```
 
 - From Pypi:
