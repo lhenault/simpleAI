@@ -23,6 +23,14 @@ Well first of all it's a fun little project, and perhaps a better use of my time
 
 On a machine with Python 3.9+:
 
+- From source:
+
+```bash
+pip install git+git+https://github.com/lhenault/simpleAI 
+```
+
+- From Pypi:
+
 ```bash
 pip install simple_ai_server
 ```
