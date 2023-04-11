@@ -1,13 +1,20 @@
 # SimpleAI
 
-A self-hosted alternative to the not-so-open AI API. It mostly focus on replicating the main endpoints for LLM:
+A self-hosted alternative to the not-so-open AI API. It is focused on replicating the main endpoints for LLM:
 
-- Text completion (`/completions/`)
-- Chat (`/chat/completions/`) (See example [here](/examples/GPT-NeoXT-Chat-Base-20B/))
-- Edits (`/edits/`) (See example [here](/examples/alpaca-lora-7B/))
-- Embeddings (`/embeddings/`) (See example [here](/examples/sentence-transformers))
+- [x] Text completion (`/completions/`)
+    - ✔️ Non `stream` responses
+    - 🚧 `stream` responses
+- [x] Chat (`/chat/completions/`) [ [example](/examples/GPT-NeoXT-Chat-Base-20B/) ]
+    - ✔️ Non `stream` responses
+    - 🚧 `stream` responses
+- [x] Edits (`/edits/`) [ [example](/examples/alpaca-lora-7B/) ]
+    - ✔️ Non `stream` responses
+    - 🚧 `stream` responses
+- [x] Embeddings (`/embeddings/`) [ [example](/examples/sentence-transformers) ]
+- [ ] Not supported (yet): `images`, `audio`, `files`, `fine-tunes`, `moderations`
 
-While it is not an exact replication of the original endpoints, it should be relatively to switch from one to the other, allowing you to experiment with competing approaches quickly and easily.
+It allows you to experiment with competing approaches quickly and easily.
 
 ![Overview](/assets/overview.jpg)
 
@@ -19,11 +26,13 @@ Well first of all it's a fun little project, and perhaps a better use of my time
 - create benchmarks to decide which approach works best for you,
 - handle some specific use cases where you cannot fully rely on an external service, without the need of re-writing everything
 
+If you find interesting use cases, feel free to share your experience.
+
 ## Installation
 
 On a machine with Python 3.9+:
 
-- From source:
+- [Latest] From source:
 
 ```bash
 pip install git+https://github.com/lhenault/simpleAI 
@@ -151,3 +160,4 @@ make install-dev
 ```
 
 This will install all dev dependencies as well as configure your pre-commit helpers.
+
