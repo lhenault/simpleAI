@@ -143,7 +143,7 @@ select = [
   "PLW",
 
   # (no commented out code) keep commented out code blocks out of the codebase
-  # "ERA001",
+  "ERA001",
 
   # (ruff-specific) Enable all ruff-specific checks (i.e. not ports of
   # functionality from an existing linter).
