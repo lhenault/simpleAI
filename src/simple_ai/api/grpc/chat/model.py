@@ -8,3 +8,6 @@ class LanguageModel:
             {"role": message.get("role"), "content": message.get("content")[::-1]}
             for message in chatlog
         ]
+
+    def stream(self, chatlog: list[list[str]] = [], *args, **kwargs) -> list:
+        raise NotImplementedError()

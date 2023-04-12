@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 from pydantic import BaseModel
 
@@ -11,7 +11,7 @@ class EmbeddingInput(BaseModel):
 
 class CompletionInput(BaseModel):
     model: str
-    prompt: str = "<|endoftext|>"
+    prompt: Union[str, List[str]] = "<|endoftext|>"
     suffix: str = ""
     max_tokens: int = 7
     temperature: float = 1.0

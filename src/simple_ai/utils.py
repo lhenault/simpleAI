@@ -1,3 +1,4 @@
+import json
 import uuid
 from datetime import datetime as dt
 
@@ -16,6 +17,25 @@ def format_autocompletion_response(model_name, predictions) -> dict:
             for idx, text in enumerate(predictions)
         ],
     }
+
+
+def format_autocompletion_stream_response(
+    current_timestamp, response_id, model_name, predictions
+) -> dict:
+    data = {
+        "id": response_id,
+        "object": "text_completion",
+        "created": current_timestamp,
+        "model": model_name,
+        "choices": [
+            {"text": text, "index": idx, "logprobs": None, "finish_reason": ""}
+            for idx, text in enumerate(predictions)
+        ],
+    }
+
+    data = f"DATA: {data}\n\n"
+
+    return data
 
 
 def format_edits_response(model_name, predictions) -> dict:
@@ -58,6 +78,27 @@ def format_chat_response(model_name: str, predictions) -> dict:
     }
 
 
+def format_chat_delta_response(
+    current_timestamp, response_id, model_name: str, predictions
+) -> dict:
+    data = {
+        "id": response_id,
+        "model": model_name,
+        "object": "chat.completion.chunk",
+        "created": current_timestamp,
+        "choices": [
+            {
+                "index": idx,
+                "delta": message,
+                "finish_reason": "stop",
+            }
+            for idx, message in enumerate(predictions)
+        ],
+    }
+
+    return f"data: {json.dumps(data)}\n\n"
+
+
 def format_embeddings_results(model_name: str, embeddings: list) -> dict:
     return {
         "object": "list",
@@ -80,5 +121,5 @@ def add_instructions(instructions: str, text: str) -> str:
 def format_chat_log(chat: list[dict[str, str]] = dict()) -> str:
     raw_chat_text = ""
     for item in chat:
-        raw_chat_text += f"{item.get('role')}: {item.get('content')}\n"
-    return raw_chat_text
+        raw_chat_text += f"{item.get('role')}: {item.get('content')}\n\n"
+    return raw_chat_text + "assistant: "
