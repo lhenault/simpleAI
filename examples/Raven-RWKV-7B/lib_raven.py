@@ -1,6 +1,7 @@
 import gc
 import logging
 import os
+from typing import List
 
 import torch
 from get_models import MODEL, TOKENIZER_PATH, get_model_path
@@ -113,7 +114,7 @@ def chat(
 
 
 def embedding(
-    inputs: list[str],
+    inputs: List[str],
     model,
     pipeline,
     temperature=1.0,  # TODO remove

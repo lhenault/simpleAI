@@ -2,7 +2,15 @@ FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
 
 # Update, install
 RUN apt-get update && \
-    apt-get install -y build-essential python3 python3-pip ninja-build git
+    apt-get install -y build-essential ninja-build git wget
+
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+    bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda && \
+    rm Miniconda3-latest-Linux-x86_64.sh && \
+    /opt/conda/bin/conda create -y --name py39 python=3.9 && \
+    /opt/conda/bin/conda clean -ya
+
+ENV PATH /opt/conda/envs/py39/bin:$PATH
 
 RUN pip install --upgrade pip setuptools wheel
 
@@ -20,9 +28,14 @@ WORKDIR /home/$USER/app
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY get_models.py .
+
 # Get model weights and tokenizer
 RUN python3 get_models.py
+
+# Copy rest
+COPY . .
+
 # Publish port
 EXPOSE 50051:50051
 
