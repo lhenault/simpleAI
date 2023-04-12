@@ -1,11 +1,9 @@
 import gc
 import logging
 import os
-from pathlib import Path
 
-import requests
 import torch
-from huggingface_hub import hf_hub_download
+from get_models import MODEL, TOKENIZER_PATH, get_model_path
 from pynvml import nvmlDeviceGetHandleByIndex, nvmlDeviceGetMemoryInfo, nvmlInit
 
 # if RWKV_CUDA_ON='1' then use CUDA kernel for seq mode (much faster)
@@ -21,48 +19,9 @@ nvmlInit()
 gpu_h = nvmlDeviceGetHandleByIndex(0)
 ctx_limit = 4096
 
-models = {
-    "raven-14b-ctx4096": {
-        "repo_id": "BlinkDL/rwkv-4-raven",
-        "title": "RWKV-4-Raven-14B-v8-Eng-20230408-ctx4096",
-    },
-    "raven-7b-ctx4096": {
-        "repo_id": "BlinkDL/rwkv-4-raven",
-        "title": "RWKV-4-Raven-7B-v7-Eng-20230404-ctx4096",
-    },
-    "raven-7b-ctx1024": {
-        "repo_id": "BlinkDL/rwkv-4-pile-7b",
-        "title": "RWKV-4-Pile-7B-Instruct-test4-20230326",
-    },
-    "rwkv-4-pile-169m": {
-        "repo_id": "BlinkDL/rwkv-4-pile-169m",
-        "title": "RWKV-4-Pile-169M-20220807-8023",
-    },
-}
-
-model = "raven-14b-ctx4096"
-# model = "raven-7b-ctx1024"
-# model = "raven-7b-ctx4096"
-# model = "rwkv-4-pile-169m"
-model_params = models[model]
-
-
-def fetch_tokenizer(tokenizer_path: Path):
-    url = "https://huggingface.co/spaces/BlinkDL/Raven-RWKV-7B/raw/main/20B_tokenizer.json"
-    tokenizer_path.parent.mkdir(exist_ok=True)
-
-    response = requests.get(url)
-    tokenizer_path.write_bytes(response.content)
-
 
 def get_model():
-    tokenizer_path = Path(__file__).parent / "20B_tokenizer.json"
-    if not tokenizer_path.exists():
-        fetch_tokenizer(tokenizer_path)
-
-    model_path = hf_hub_download(
-        repo_id=model_params["repo_id"], filename=f"{model_params['title']}.pth"
-    )
+    model_path = get_model_path(MODEL)
 
     model = RWKV(
         model=model_path, strategy="cuda fp16i8 *40 -> cuda fp16i8 *0+ -> cpu fp32 *1"
@@ -70,7 +29,7 @@ def get_model():
     # model = RWKV(model=model_path, strategy="cuda fp16i8 *0+ -> cpu fp32 *1")  # stream mode
     # model = RWKV(model=model_path, strategy="cuda fp16i8 *10 -> cuda fp16")
 
-    pipeline = PIPELINE(model, str(tokenizer_path))
+    pipeline = PIPELINE(model, str(TOKENIZER_PATH))
 
     return model, pipeline
 

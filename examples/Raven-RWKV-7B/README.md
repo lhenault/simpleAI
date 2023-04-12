@@ -8,8 +8,6 @@ RWKV is an RNN with Transformer-level language model performance that can be tra
 
 ## Build
 
-Note: requires a GPU and [setting the default runtime to nvidia](https://stackoverflow.com/a/61737404/8083679)
-
 ```bash
 docker build . -t raven-rwkv-service:latest
 ```
