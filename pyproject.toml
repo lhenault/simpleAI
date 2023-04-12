@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "simple_ai_server"
-version = "0.1.9"
+version = "0.2.0"
 description = ""
 authors = ["Louis Hénault"]
 readme = "README.md"
