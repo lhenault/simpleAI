@@ -4,13 +4,11 @@ A self-hosted alternative to the not-so-open AI API. It is focused on replicatin
 
 - [x] Text completion (`/completions/`)
     - ✔️ Non `stream` responses
-    - 🚧 `stream` responses
+    - ✔️ `stream` responses
 - [x] Chat (`/chat/completions/`) [ [example](/examples/GPT-NeoXT-Chat-Base-20B/) ]
     - ✔️ Non `stream` responses
-    - 🚧 `stream` responses
+    - ✔️ `stream` responses
 - [x] Edits (`/edits/`) [ [example](/examples/alpaca-lora-7B/) ]
-    - ✔️ Non `stream` responses
-    - 🚧 `stream` responses
 - [x] Embeddings (`/embeddings/`) [ [example](/examples/sentence-transformers) ]
 - [ ] Not supported (yet): `images`, `audio`, `files`, `fine-tunes`, `moderations`
 
