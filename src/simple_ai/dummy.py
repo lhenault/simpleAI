@@ -87,3 +87,9 @@ dummy_embedding = {
     "model": "text-embedding-ada-002",
     "usage": {"prompt_tokens": 8, "total_tokens": 8},
 }
+
+dummy_usage = {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0
+}
