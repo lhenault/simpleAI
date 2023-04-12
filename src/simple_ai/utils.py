@@ -18,7 +18,7 @@ def format_autocompletion_response(model_name, predictions, usage=dummy_usage) -
             {"text": text, "index": idx, "logprobs": None, "finish_reason": ""}
             for idx, text in enumerate(predictions)
         ],
-        "usage": usage
+        "usage": usage,
     }
 
 
@@ -57,7 +57,7 @@ def format_edits_response(model_name, predictions, usage=dummy_usage) -> dict:
             }
             for idx, text in enumerate(predictions)
         ],
-        "usage": usage
+        "usage": usage,
     }
 
 
@@ -79,7 +79,7 @@ def format_chat_response(model_name: str, predictions, usage=dummy_usage) -> dic
             }
             for idx, text in enumerate(predictions)
         ],
-        "usage": usage
+        "usage": usage,
     }
 
 
@@ -104,7 +104,7 @@ def format_chat_delta_response(
     return f"data: {json.dumps(data)}\n\n"
 
 
-def format_embeddings_results(model_name: str, embeddings: list, usage: dict=dummy_usage) -> dict:
+def format_embeddings_results(model_name: str, embeddings: list, usage: dict = dummy_usage) -> dict:
     return {
         "object": "list",
         "data": [
@@ -112,7 +112,7 @@ def format_embeddings_results(model_name: str, embeddings: list, usage: dict=dum
             for idx, embedding in enumerate(embeddings)
         ],
         "model": model_name,
-        "usage": usage
+        "usage": usage,
     }
 
 

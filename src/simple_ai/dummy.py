@@ -88,8 +88,4 @@ dummy_embedding = {
     "usage": {"prompt_tokens": 8, "total_tokens": 8},
 }
 
-dummy_usage = {
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "total_tokens": 0
-}
+dummy_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
