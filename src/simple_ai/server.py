@@ -96,7 +96,6 @@ async def complete(
     )
     background_tasks.add_task(lambda f: f.close(), predictions_stream)
 
-    # predictions_stream = [[{'role': f"assistnat "}]] + [[{'content': f"{i} "}] for i in range(10)]
     uuid = uuid4().hex
     current_timestamp = int(dt.now().timestamp())
     postprocessed = map(
@@ -148,7 +147,6 @@ async def chat_complete(
 
     background_tasks.add_task(lambda f: f.close(), predictions_stream)
 
-    # predictions_stream = [[{'role': f"assistnat "}]] + [[{'content': f"{i} "}] for i in range(10)]
     uuid = uuid4().hex
     current_timestamp = int(dt.now().timestamp())
     postprocessed = map(

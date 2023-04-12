@@ -54,9 +54,6 @@ def run(
 def stream_chatlog(stub, chatlog):
     responses = stub.Stream(chatlog)
 
-    # for response in responses:
-    # raise ValueError(response, response.__dir__(), type(response))
-
     try:
         yield from map(lambda x: [MessageToDict(x_i) for x_i in x.messages], responses)
     finally:
