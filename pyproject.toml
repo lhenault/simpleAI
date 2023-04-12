@@ -21,7 +21,8 @@ ruff = "^0.0.260"
 black = "^23.3.0"
 pre-commit = "^3.2.2"
 poetry = "^1.4.1"
-grpcio-tools= "^1.51.3"
+grpcio-tools = "^1.51.3"
+protobuf = "^4.21.3"
 
 [build-system]
 requires = ["poetry-core>=1.1.0b3"]
