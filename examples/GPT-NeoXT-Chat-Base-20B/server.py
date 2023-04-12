@@ -1,7 +1,7 @@
 import logging
 
 from model import OpenChatModel as Model
-from simple_ai.serve.python.completion.server import LanguageModelServicer, serve
+from simple_ai.api.grpc.completion.server import LanguageModelServicer, serve
 
 if __name__ == "__main__":
     import argparse
