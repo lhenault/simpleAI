@@ -1,2 +1,2 @@
 sentence-transformers
-simple_ai_server>=0.1.9
+simple_ai_server>=0.2

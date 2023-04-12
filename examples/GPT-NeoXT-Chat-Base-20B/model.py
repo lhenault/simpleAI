@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import torch
 from get_models import MODEL_ID
-from simple_ai.serve.python.completion.server import LanguageModel
+from simple_ai.api.grpc.completion.server import LanguageModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
