@@ -10,6 +10,7 @@ packages = [{include = "simple_ai", from = "src"}]
 python = "^3.9"
 fastapi= "^0.94.1"
 grpcio= "^1.51.3"
+protobuf= "^4.21.3"
 uvicorn= "^0.21.0"
 tomli= {version = "^2.0.1", python = "<3.11"}
 
