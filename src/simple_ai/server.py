@@ -161,7 +161,7 @@ async def chat_complete(
 @app.post("/edits/")
 async def edit(body: Annotated[InstructionInput, Body(example=dummy_edit)]):
     llm = get_model(model_id=body.model)
-    input_text = add_instructions(instructions=body.instruction, text=input)
+    input_text = add_instructions(instructions=body.instruction, text=body.input)
 
     predictions = llm.complete(
         prompt=input_text,
