@@ -144,6 +144,65 @@ print(openai.Model.list())
 completion = openai.Completion.create(model="llama-7B", prompt="Hello everyone this is")
 ```
 
+## Common issues and solutions
+
+### Adding a CORS middleware
+
+If you encounter CORS issues, it is suggested to not use the `simple_ai serve` command, but to rather use your own script to add your CORS configuration, using the [FastAPI CORS middleware](https://fastapi.tiangolo.com/tutorial/cors/).
+
+For instance you can create `my_server.py` with:
+
+```python
+from simple_ai.server import app
+from fastapi.middleware.cors import CORSMiddleware
+
+def add_cors(app):
+    origins = [
+        "http://localhost",
+        "http://localhost:8080"
+    ]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    return app
+
+def serve_app(host="127.0.0.1", port=8080, **kwargs):
+    app = add_cors(app)
+    uvicorn.run(app=app, host=host, port=port)
+    
+if __name__ == "__main__":
+    serve_app(host="127.0.0.1", port=8080)
+    
+```
+
+And run it as `python3 my_server.py` instead.
+
+### Router and needing `/v1` prefix in the endpoints
+
+Some projects have decided to include the `/v1` prefix as part of the endpoints, while OpenAI client includes it in its `api_base` parameter. If you need to have it as part of the endpoints for your project, you can use FastAPI's `APIRouter` (see [here](https://fastapi.tiangolo.com/advanced/custom-request-and-route/)) in a custom script:
+
+```python
+from simple_ai.server import app
+from fastapi import APIRouter
+
+def add_router(app):
+    router = APIRouter(prefix="/v1")
+    app.include_router(router)
+    return app
+
+def serve_app(host="127.0.0.1", port=8080, **kwargs):
+    app = add_router(app)
+    uvicorn.run(app=app, host=host, port=port)
+    
+if __name__ == "__main__":
+    serve_app(host="127.0.0.1", port=8080)
+    
+```
+
 ## Contribute
 
 This is very much work in progress and far from being perfect, so let me know if you want to help. PR, issues, documentation, cool logo, all the usual candidates are welcome.
