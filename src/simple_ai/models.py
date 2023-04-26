@@ -12,11 +12,11 @@ else:
 from .api.grpc.chat import client as chat_client
 from .api.grpc.completion import client as lm_client
 from .api.grpc.embedding import client as embed_client
+from .utils import TupleOrList
 
 path = pathlib.Path(os.environ.get("SIMPLEAI_CONFIG_PATH", "models.toml"))
 with path.open(mode="rb") as fp:
     MODELS_ZOO = tomllib.load(fp)
-
 
 @dataclass(unsafe_hash=True)
 class RpcCompletionLanguageModel:
@@ -113,7 +113,7 @@ class RpcChatLanguageModel:
 
     def chat(
         self,
-        messages: list[list[str]] = [],
+        messages: TupleOrList[TupleOrList[str]] = (),
         max_tokens: int = 64,
         temperature: float = 1.0,
         top_p: float = 1.0,
@@ -140,7 +140,7 @@ class RpcChatLanguageModel:
 
     def stream(
         self,
-        messages: list[list[str]] = [],
+        messages: TupleOrList[TupleOrList[str]] = (),
         max_tokens: int = 64,
         temperature: float = 1.0,
         top_p: float = 1.0,

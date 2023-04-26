@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass
+from typing import Union
 
 from get_models import MODEL_ID
 from sentence_transformers import SentenceTransformer
@@ -11,8 +12,8 @@ class SentenceTransformerModel:
 
     def embed(
         self,
-        inputs: list = [],
-    ) -> list:
+        inputs: Union[list, tuple] = (),
+    ) -> Union[list, tuple]:
         logging.info(f"Processing inputs : {inputs}")
         embeddings = self.model.encode(inputs)
         logging.info(

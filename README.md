@@ -69,16 +69,17 @@ To expose for instance an embedding model in Python, you simply have to import a
 ```python
 import logging
 from dataclasses import dataclass
+from typing import Union
 
 from simple_ai.api.grpc.embedding.server import serve, LanguageModelServicer
 
 @dataclass(unsafe_hash=True)
 class EmbeddingModel:
     def embed(self, 
-        inputs: list=[],
-    ) -> list:
+        inputs: Union[list, tuple]=(),
+    ) -> Union[list, tuple]:
         # TODO : implements the embed method
-        return [[]]
+        return (())
 
 if __name__ == '__main__':   
     model_servicer = LanguageModelServicer(model=EmbeddingModel())

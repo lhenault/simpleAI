@@ -2,14 +2,14 @@
 
 from __future__ import print_function
 
-from typing import List, Union
+from typing import Union
 
 import grpc
 from google.protobuf.json_format import MessageToDict
 
 from . import llm_chat_pb2
 from . import llm_chat_pb2_grpc
-
+from ....utils import TupleOrList
 
 def get_chatlog(stub, chatlog):
     response = stub.Chat(chatlog)
@@ -21,7 +21,7 @@ def get_chatlog(stub, chatlog):
 
 def run(
     url: str = "localhost:50051",
-    messages: List[List[str]] = [],
+    messages: TupleOrList[TupleOrList[str]] = (),
     max_tokens: int = 512,
     temperature: float = 1.0,
     top_p: float = 1.0,
@@ -62,7 +62,7 @@ def stream_chatlog(stub, chatlog):
 
 def run_stream(
     url: str = "localhost:50051",
-    messages: List[List[str]] = [],
+    messages: TupleOrList[TupleOrList[str]] = (),
     max_tokens: int = 512,
     temperature: float = 1.0,
     top_p: float = 1.0,

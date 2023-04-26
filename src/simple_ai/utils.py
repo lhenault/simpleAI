@@ -1,9 +1,11 @@
 import json
 import uuid
 from datetime import datetime as dt
+from typing import Union
 
 from .dummy import dummy_usage
 
+TupleOrList = Union[list, tuple]
 
 def format_autocompletion_response(model_name, predictions, usage=dummy_usage) -> dict:
     response_id = uuid.uuid4()

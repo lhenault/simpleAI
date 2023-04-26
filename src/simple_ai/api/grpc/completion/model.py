@@ -21,8 +21,7 @@ class LanguageModel:
         best_of: int = 0,
         logit_bias: dict = {},
     ) -> str:
-        # TODO : implement method for your LLM
-        return "QWERTYUIOP\nASDFGHJKL\nZXCVBNM"
+        raise NotImplementedError
 
     def stream_complete(
         self,
@@ -40,6 +39,5 @@ class LanguageModel:
         frequence_penalty: float = 0.0,
         best_of: int = 0,
         logit_bias: dict = {},
-    ) -> str:
-        # TODO : implement method for your LLM
-        return "QWERTYUIOP\nASDFGHJKL\nZXCVBNM".split("\n")
+    ) -> Union[str, list, tuple]:
+        raise NotImplementedError
