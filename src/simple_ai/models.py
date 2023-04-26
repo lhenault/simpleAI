@@ -18,6 +18,7 @@ path = pathlib.Path(os.environ.get("SIMPLEAI_CONFIG_PATH", "models.toml"))
 with path.open(mode="rb") as fp:
     MODELS_ZOO = tomllib.load(fp)
 
+
 @dataclass(unsafe_hash=True)
 class RpcCompletionLanguageModel:
     name: str

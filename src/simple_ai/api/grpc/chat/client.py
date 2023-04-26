@@ -11,6 +11,7 @@ from . import llm_chat_pb2
 from . import llm_chat_pb2_grpc
 from ....utils import TupleOrList
 
+
 def get_chatlog(stub, chatlog):
     response = stub.Chat(chatlog)
     results = []
