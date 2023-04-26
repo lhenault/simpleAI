@@ -166,24 +166,28 @@ class RpcChatLanguageModel:
         )
 
 
-def select_model_type(model_interface: str = "gRPC", task: str = "complete"):
+def select_model_type(model_interface: str, task: str):
     if model_interface == "gRPC":
         if task == "embed":
             return RpcEmbeddingLanguageModel
         if task == "chat":
             return RpcChatLanguageModel
-        return RpcCompletionLanguageModel
-    return RpcCompletionLanguageModel
+        if task == "complete":
+            return RpcCompletionLanguageModel
+        raise ValueError(
+            f"`task` value must be either `chat`, `embed`, or `complete`, got `{task}`."
+        )
+    return ValueError(f"`model_interface` value must be `gRPC`, got `{task}` instead.")
 
 
 def get_model(model_id: str, metadata: dict = MODELS_ZOO, task: str = "complete"):
     if model_id in metadata.keys():
-        model_interface = metadata.get(model_id).get("network", dict())
-        model_url = model_interface.get("url", None)
-        model_interface = model_interface.get("type", None)
+        network_parameters = metadata.get(model_id).get("network", dict())
+        model_url = network_parameters.get("url", None)
+        model_interface = network_parameters.get("type", None)
         return select_model_type(model_interface, task)(name=model_id, url=model_url)
     else:
-        return None
+        raise ValueError(f"Cannot find model named `{model_id}` in configuration.")
 
 
 def list_models(metadata: dict = MODELS_ZOO) -> list:
