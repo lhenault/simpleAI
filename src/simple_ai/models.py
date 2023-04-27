@@ -12,6 +12,7 @@ else:
 from .api.grpc.chat import client as chat_client
 from .api.grpc.completion import client as lm_client
 from .api.grpc.embedding import client as embed_client
+from .api_models import ModelConfig, ModelInterfaceTypes, ModelTaskTypes
 
 path = pathlib.Path(os.environ.get("SIMPLEAI_CONFIG_PATH", "models.toml"))
 with path.open(mode="rb") as fp:
@@ -174,18 +175,17 @@ def select_model_type(model_interface: str, task: str):
             return RpcChatLanguageModel
         if task == "complete":
             return RpcCompletionLanguageModel
-        raise ValueError(
-            f"`task` value must be either `chat`, `embed`, or `complete`, got `{task}`."
-        )
-    return ValueError(f"`model_interface` value must be `gRPC`, got `{task}` instead.")
+        raise ValueError(f"`task` value must be in {ModelTaskTypes.list()}, got `{task}` instead`.")
+    return ValueError(
+        f"`model_interface` value must be in {ModelInterfaceTypes.list()} `gRPC`, got"
+        f" `{model_interface}` instead."
+    )
 
 
-def get_model(model_id: str, metadata: dict = MODELS_ZOO, task: str = "complete"):
+def get_model(model_id: str, task: ModelTaskTypes, metadata: dict = MODELS_ZOO):
     if model_id in metadata.keys():
-        network_parameters = metadata.get(model_id).get("network", dict())
-        model_url = network_parameters.get("url", None)
-        model_interface = network_parameters.get("type", None)
-        return select_model_type(model_interface, task)(name=model_id, url=model_url)
+        model_config = ModelConfig(**metadata.get(model_id)).network
+        return select_model_type(model_config.type, task)(name=model_id, url=model_config.url)
     else:
         raise ValueError(f"Cannot find model named `{model_id}` in configuration.")
 
