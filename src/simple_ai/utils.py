@@ -118,7 +118,7 @@ def format_embeddings_results(model_name: str, embeddings: list, usage: dict = d
 
 def add_instructions(instructions: str, text: str) -> str:
     prompt = f"### Instruction:\n{instructions}.\n\n"
-    if input:
+    if text:
         prompt += f"### Input:\n{text}.\n\n"
     prompt += "### Response:"
     return prompt
