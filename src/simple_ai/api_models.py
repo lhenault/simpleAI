@@ -1,6 +1,43 @@
+from enum import Enum
 from typing import List, Optional, Union
 
 from pydantic import BaseModel
+
+
+class ExtendedEnum(Enum):
+    @classmethod
+    def list(cls):
+        return list(map(lambda c: c.value, cls))
+
+
+class ModelInterfaceTypes(str, ExtendedEnum):
+    gRPC = "gRPC"
+
+
+class ModelTaskTypes(str, ExtendedEnum):
+    complete = "complete"
+    chat = "chat"
+    embed = "embed"
+
+    @classmethod
+    def list(cls):
+        return list(map(lambda c: c.value, cls))
+
+
+class ModelMetadata(BaseModel):
+    owned_by: Optional[str]
+    permission: Optional[List]
+    description: Optional[str] = ""
+
+
+class ModelInterface(BaseModel):
+    type: ModelInterfaceTypes = "gRPC"
+    url: str
+
+
+class ModelConfig(BaseModel):
+    metadata: ModelMetadata
+    network: ModelInterface
 
 
 class EmbeddingInput(BaseModel):
