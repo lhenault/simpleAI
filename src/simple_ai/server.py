@@ -57,7 +57,7 @@ async def complete(
         assert len(body.prompt) == 1, "unsupported, at most 1 prompt allowed"
         prompt = body.prompt[0]
 
-    llm = get_model(model_id=body.model)
+    llm = get_model(model_id=body.model, task="complete")
     if not body.stream:
         predictions = llm.complete(
             prompt=prompt,
@@ -160,7 +160,7 @@ async def chat_complete(
 # Edits
 @app.post("/edits/")
 async def edit(body: Annotated[InstructionInput, Body(example=dummy_edit)]):
-    llm = get_model(model_id=body.model)
+    llm = get_model(model_id=body.model, task="complete")
     input_text = add_instructions(instructions=body.instruction, text=body.input)
 
     predictions = llm.complete(
