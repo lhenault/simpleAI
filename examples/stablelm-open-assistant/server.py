@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     logging.info(f"Starting gRPC server on {args.address}")
     chat_servicer = ChatServicer(model=Model())
-    
+
     serve(
         address=args.address,
         chat_servicer=chat_servicer,

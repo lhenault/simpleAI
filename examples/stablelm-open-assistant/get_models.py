@@ -11,7 +11,7 @@ if __name__ == "__main__":
         snapshot_download(repo_id)
     except Exception as ex:
         logging.exception(f"Could not retrieve {repo_id}: {ex}")
-    
+
     try:
         move_cache()
     except Exception as ex:
