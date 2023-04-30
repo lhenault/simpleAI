@@ -1,0 +1,6 @@
+accelerate
+bitsandbytes
+sentencepiece
+torch
+transformers
+simple_ai_server>=0.2
