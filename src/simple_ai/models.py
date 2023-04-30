@@ -3,6 +3,10 @@ import pathlib
 import sys
 from dataclasses import dataclass
 from typing import Union
+import httpx
+from fastapi import Request
+from fastapi.responses import StreamingResponse
+from starlette.background import BackgroundTask
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -18,6 +22,20 @@ path = pathlib.Path(os.environ.get("SIMPLEAI_CONFIG_PATH", "models.toml"))
 with path.open(mode="rb") as fp:
     MODELS_ZOO = tomllib.load(fp)
 
+class ProxyLanguageModel:
+    async def forward_request(request: Request):
+        client = request.app.state.client
+        url = httpx.URL(path=request.url.path, query=request.url.query.encode('utf-8'))
+        req = client.build_request(
+            request.method, url, headers=request.headers.raw, content=request.stream()
+        )
+        r = await client.send(req, stream=True)
+        return StreamingResponse(
+            r.aiter_raw(),
+            status_code=r.status_code,
+            headers=r.headers,
+            background=BackgroundTask(r.aclose)
+        )
 
 @dataclass(unsafe_hash=True)
 class RpcCompletionLanguageModel:
@@ -176,8 +194,10 @@ def select_model_type(model_interface: str, task: str):
         if task == "complete":
             return RpcCompletionLanguageModel
         raise ValueError(f"`task` value must be in {ModelTaskTypes.list()}, got `{task}` instead`.")
+    if model_interface == "proxy":
+        return ProxyLanguageModel
     return ValueError(
-        f"`model_interface` value must be in {ModelInterfaceTypes.list()} `gRPC`, got"
+        f"`model_interface` value must be in {ModelInterfaceTypes.list()}, got"
         f" `{model_interface}` instead."
     )
 

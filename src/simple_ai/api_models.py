@@ -12,6 +12,7 @@ class ExtendedEnum(Enum):
 
 class ModelInterfaceTypes(str, ExtendedEnum):
     gRPC = "gRPC"
+    proxy = "proxy"
 
 
 class ModelTaskTypes(str, ExtendedEnum):

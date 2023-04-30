@@ -5,12 +5,12 @@ from typing import Annotated
 from uuid import uuid4
 
 import fastapi
-from fastapi import Body, FastAPI, Response
+from fastapi import Body, FastAPI, Response, Request
 from fastapi.responses import StreamingResponse
 
 from .api_models import ChatCompletionInput, CompletionInput, EmbeddingInput, InstructionInput
 from .dummy import dummy_chat, dummy_complete, dummy_edit, dummy_embedding
-from .models import get_model, get_model_infos, list_models
+from .models import get_model, get_model_infos, list_models, ProxyLanguageModel
 from .utils import (
     add_instructions,
     format_autocompletion_response,
@@ -32,7 +32,6 @@ app = FastAPI(
     },
 )
 
-
 # Models
 @app.get("/models/")
 async def show_models():
@@ -49,6 +48,7 @@ async def show_model(model_id: str):
 async def complete(
     body: Annotated[CompletionInput, Body(example=dummy_complete)],
     background_tasks: fastapi.background.BackgroundTasks,
+    request: Request
 ):
     assert body.logprobs <= 5
 
@@ -58,6 +58,10 @@ async def complete(
         prompt = body.prompt[0]
 
     llm = get_model(model_id=body.model, task="complete")
+    
+    if isinstance(llm, ProxyLanguageModel):
+        return llm.forward_request(request)
+    
     if not body.stream:
         predictions = llm.complete(
             prompt=prompt,
@@ -112,8 +116,13 @@ async def chat_complete(
     body: Annotated[ChatCompletionInput, Body(example=dummy_chat)],
     response: Response,
     background_tasks: fastapi.background.BackgroundTasks,
+    request: Request
 ):
     llm = get_model(model_id=body.model, task="chat")
+        
+    if isinstance(llm, ProxyLanguageModel):
+        return llm.forward_request(request)
+    
     messages = [[message.get("role", ""), message.get("content", "")] for message in body.messages]
     if not body.stream:
         predictions = llm.chat(
@@ -159,8 +168,12 @@ async def chat_complete(
 
 # Edits
 @app.post("/edits/")
-async def edit(body: Annotated[InstructionInput, Body(example=dummy_edit)]):
+async def edit(body: Annotated[InstructionInput, Body(example=dummy_edit)], request: Request):
     llm = get_model(model_id=body.model, task="complete")
+        
+    if isinstance(llm, ProxyLanguageModel):
+        return llm.forward_request(request)
+    
     input_text = add_instructions(instructions=body.instruction, text=body.input)
 
     predictions = llm.complete(
@@ -176,8 +189,12 @@ async def edit(body: Annotated[InstructionInput, Body(example=dummy_edit)]):
 
 # Embeddings
 @app.post("/embeddings/")
-async def embed(body: Annotated[EmbeddingInput, Body(example=dummy_embedding)]):
+async def embed(body: Annotated[EmbeddingInput, Body(example=dummy_embedding)], request: Request):
     llm = get_model(model_id=body.model, task="embed")
+    
+    if isinstance(llm, ProxyLanguageModel):
+        return llm.forward_request(request)
+    
     if isinstance(body.input, str):
         body.input = [body.input]
 
