@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from threading import Thread
 
@@ -32,10 +33,10 @@ class OpenAssistantModel(LanguageModel):
         *args,
         **kwargs,
     ) -> str:
-        print(f"Preprocessing chatlog:\n{chatlog}")
+        logging.info(f"Preprocessing chatlog:\n{chatlog}")
         prompt = format_chat_log(chatlog)
 
-        print(f"Input prompt:\n{prompt}")
+        logging.info(f"Input prompt:\n{prompt}")
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
 
         outputs = self.model.generate(
@@ -47,7 +48,7 @@ class OpenAssistantModel(LanguageModel):
             pad_token_id=self.tokenizer.eos_token_id,
         )
         output = self.tokenizer.batch_decode(outputs)[0]
-        print(f"Model output:\n{output}")
+        logging.info(f"Model output:\n{output}")
         # remove the context from the output
         output = output[len(prompt) :]
 
@@ -64,10 +65,10 @@ class OpenAssistantModel(LanguageModel):
     ):
         yield [{"role": "assistant"}]
 
-        print(f"Preprocessing chatlog:\n{chatlog}")
+        logging.info(f"Preprocessing chatlog:\n{chatlog}")
         prompt = format_chat_log(chatlog)
 
-        print(f"Input prompt:\n{prompt}")
+        logging.info(f"Input prompt:\n{prompt}")
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
 
         # Generate stream, yield delta
@@ -85,8 +86,8 @@ class OpenAssistantModel(LanguageModel):
         thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
         thread.start()
 
-        print("Output:")
+        logging.info("Output:")
         for delta in streamer:
             if delta:
-                print(delta)
+                logging.info(delta)
                 yield [{"content": delta}]
