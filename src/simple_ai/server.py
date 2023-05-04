@@ -24,8 +24,8 @@ from .utils import (
 app = FastAPI(
     title="SimpleAI",
     description="A self-hosted alternative API to the not so Open one",
-    version="0.0.1",
-    terms_of_service="http://example.com/terms/",
+    version="0.2",
+    terms_of_service="https://github.com/lhenault",
     contact={
         "name": "Lhenault",
         "url": "https://github.com/lhenault",
@@ -34,7 +34,7 @@ app = FastAPI(
 
 
 # Models
-@app.get("/models/")
+@app.get("/models")
 async def show_models():
     return list_models()
 
@@ -45,7 +45,7 @@ async def show_model(model_id: str):
 
 
 # Completions
-@app.post("/completions/")
+@app.post("/completions")
 async def complete(
     body: Annotated[CompletionInput, Body(example=dummy_complete)],
     background_tasks: fastapi.background.BackgroundTasks,
@@ -158,7 +158,7 @@ async def chat_complete(
 
 
 # Edits
-@app.post("/edits/")
+@app.post("/edits")
 async def edit(body: Annotated[InstructionInput, Body(example=dummy_edit)]):
     llm = get_model(model_id=body.model, task="complete")
     input_text = add_instructions(instructions=body.instruction, text=body.input)
@@ -175,7 +175,7 @@ async def edit(body: Annotated[InstructionInput, Body(example=dummy_edit)]):
 
 
 # Embeddings
-@app.post("/embeddings/")
+@app.post("/embeddings")
 async def embed(body: Annotated[EmbeddingInput, Body(example=dummy_embedding)]):
     llm = get_model(model_id=body.model, task="embed")
     if isinstance(body.input, str):
