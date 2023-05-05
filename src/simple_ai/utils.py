@@ -31,7 +31,7 @@ def format_autocompletion_stream_response(
         "created": current_timestamp,
         "model": model_name,
         "choices": [
-            {"text": text, "index": idx, "logprobs": None, "finish_reason": ""}
+            {"text": text, "index": idx, "logprobs": None, "finish_reason": None}
             for idx, text in enumerate(predictions)
         ],
     }
@@ -82,8 +82,8 @@ def format_chat_response(model_name: str, predictions, usage=dummy_usage) -> dic
     }
 
 
-def format_chat_delta_response(
-    current_timestamp, response_id, model_name: str, predictions
+def format_chat_delta_response_helper(
+    current_timestamp, response_id, model_name: str, predictions, finish_reason=None
 ) -> dict:
     data = {
         "id": response_id,
@@ -94,13 +94,22 @@ def format_chat_delta_response(
             {
                 "index": idx,
                 "delta": message,
-                "finish_reason": "stop",
+                "finish_reason": finish_reason,
             }
             for idx, message in enumerate(predictions)
         ],
     }
-
     return f"data: {json.dumps(data)}\n\n"
+
+
+def format_chat_delta_response(
+    current_timestamp, response_id, model_name: str, predictions
+) -> dict:
+    data = format_chat_delta_response_helper(
+        current_timestamp, response_id, model_name, predictions, finish_reason=None
+    )
+
+    return data
 
 
 def format_embeddings_results(model_name: str, embeddings: list, usage: dict = dummy_usage) -> dict:
