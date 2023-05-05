@@ -192,7 +192,7 @@ def get_model(model_id: str, task: ModelTaskTypes, metadata: dict = MODELS_ZOO):
 
 def list_models(metadata: dict = MODELS_ZOO) -> list:
     return dict(
-        data=[{"id": key, **meta.get("metadata")} for key, meta in metadata.items()], object="list"
+        data=[{"id": key, **meta.get("metadata"), "object": "model"} for key, meta in metadata.items()], object="list"
     )
 
 
