@@ -181,25 +181,23 @@ if __name__ == "__main__":
 
 And run it as `python3 my_server.py` instead.
 
-### Router and needing `/v1` prefix in the endpoints
+### I needd `/v1` prefix in the endpoints
 
-Some projects have decided to include the `/v1` prefix as part of the endpoints, while OpenAI client includes it in its `api_base` parameter. If you need to have it as part of the endpoints for your project, you can use FastAPI's `APIRouter` (see [here](https://fastapi.tiangolo.com/advanced/custom-request-and-route/)) in a custom script:
+Some projects have decided to include the `/v1` prefix as part of the endpoints, while OpenAI client includes it in its `api_base` parameter. If you need to have it as part of the endpoints for your project, you can use a custom script instead of `simple_ai serve`:
 
 ```python
-from simple_ai.server import app
-from fastapi import APIRouter
+import uvicorn
+from simple_ai.server import app as v1_app
+from fastapi import APIRouter, FastAPI
 
-def add_router(app):
-    router = APIRouter(prefix="/v1")
-    app.include_router(router)
-    return app
+sai_app = FastAPI()
+sai_app.mount("/v1", v1_app)
 
-def serve_app(host="127.0.0.1", port=8080, **kwargs):
-    app = add_router(app)
+def serve_app(app=sai_app, host="0.0.0.0", port=8080):
     uvicorn.run(app=app, host=host, port=port)
     
 if __name__ == "__main__":
-    serve_app(host="127.0.0.1", port=8080)
+    serve_app()
     
 ```
 
