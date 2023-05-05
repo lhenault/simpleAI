@@ -16,6 +16,7 @@ from .utils import (
     format_autocompletion_response,
     format_autocompletion_stream_response,
     format_chat_delta_response,
+    format_chat_delta_response_helper,
     format_chat_response,
     format_edits_response,
     format_embeddings_results,
@@ -152,8 +153,10 @@ async def chat_complete(
     postprocessed = map(
         partial(format_chat_delta_response, current_timestamp, uuid, body.model), predictions_stream
     )
-
-    with_finaliser = chain(postprocessed, ("data: [DONE]\n",))
+    stop_message = format_chat_delta_response_helper(
+        current_timestamp, uuid, body.model, predictions=("",), finish_reason="stop"
+    )
+    with_finaliser = chain(postprocessed, stop_message, ("data: [DONE]\n",))
     return StreamingResponse(with_finaliser, media_type="text/event-stream")
 
 
