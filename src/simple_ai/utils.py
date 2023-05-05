@@ -101,6 +101,7 @@ def format_chat_delta_response_helper(
     }
     return f"data: {json.dumps(data)}\n\n"
 
+
 def format_chat_delta_response(
     current_timestamp, response_id, model_name: str, predictions
 ) -> dict:
