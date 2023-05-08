@@ -2,14 +2,14 @@
 
 A self-hosted alternative to the not-so-open AI API. It is focused on replicating the main endpoints for LLM:
 
-- [x] Text completion (`/completions/`)
+- [x] Text completion (`/completions`)
     - ✔️ Non `stream` responses
     - ✔️ `stream` responses
-- [x] Chat (`/chat/completions/`) [ [example](/examples/GPT-NeoXT-Chat-Base-20B/) ]
+- [x] Chat (`/chat/completions`) [ [example](/examples/GPT-NeoXT-Chat-Base-20B/) ]
     - ✔️ Non `stream` responses
     - ✔️ `stream` responses
-- [x] Edits (`/edits/`) [ [example](/examples/alpaca-lora-7B/) ]
-- [x] Embeddings (`/embeddings/`) [ [example](/examples/sentence-transformers) ]
+- [x] Edits (`/edits`) [ [example](/examples/alpaca-lora-7B/) ]
+- [x] Embeddings (`/embeddings`) [ [example](/examples/sentence-transformers) ]
 - [ ] Not supported (yet): `images`, `audio`, `files`, `fine-tunes`, `moderations`
 
 It allows you to experiment with competing approaches quickly and easily.
@@ -114,7 +114,7 @@ Or you can directly use the API with the tool of your choice.
 
 ```bash
 curl -X 'POST' \
-  'http://127.0.0.1:8080/edits/' \
+  'http://127.0.0.1:8080/edits' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
