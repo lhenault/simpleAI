@@ -8,11 +8,19 @@ from simple_ai.api.grpc.chat.server import LanguageModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
 
 
+def preprocess_role(role: str):
+    if role == "user":
+        return "prompter"
+    if role == "system":
+        return "assistant"
+    return role
+
+
 def format_chat_log(chat: list[dict[str, str]] = dict()) -> str:
     raw_chat_text = ""
     for item in chat:
         raw_chat_text += (
-            f"<|{item.get('role').replace('user', 'prompter')}|>{item.get('content')}<|endoftext|>"
+            f"<|{preprocess_role(item.get('role'))}|>{item.get('content')}<|endoftext|>"
         )
     return raw_chat_text + "<|assistant|>"
 
@@ -30,6 +38,7 @@ class OpenAssistantModel(LanguageModel):
         max_tokens: int = 512,
         temperature: float = 0.9,
         top_p: int = 0.5,
+        role: str = "system",
         *args,
         **kwargs,
     ) -> str:
@@ -49,10 +58,14 @@ class OpenAssistantModel(LanguageModel):
         )
         output = self.tokenizer.batch_decode(outputs)[0]
         logging.info(f"Model output:\n{output}")
-        # remove the context from the output
+
+        # Remove the context from the output
         output = output[len(prompt) :]
 
-        return [{"role": "assistant", "content": output}]
+        # Stop at "<|endoftext|>"
+        if "<|endoftext|>" in output:
+            output = output.split("<|endoftext|>")[0]
+        return [{"role": role, "content": output}]
 
     def stream(
         self,
@@ -60,10 +73,11 @@ class OpenAssistantModel(LanguageModel):
         max_tokens: int = 512,
         temperature: float = 0.9,
         top_p: int = 0.5,
+        role: str = "system",
         *args,
         **kwargs,
     ):
-        yield [{"role": "assistant"}]
+        yield [{"role": role}]
 
         logging.info(f"Preprocessing chatlog:\n{chatlog}")
         prompt = format_chat_log(chatlog)
@@ -89,5 +103,9 @@ class OpenAssistantModel(LanguageModel):
         logging.info("Output:")
         for delta in streamer:
             if delta:
+                if "<|endoftext|>" in delta:
+                    logging.info(delta)
+                    yield [{"content": delta.split("<|endoftext|>")[0]}]
+                    break
                 logging.info(delta)
                 yield [{"content": delta}]
