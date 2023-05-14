@@ -1,4 +1,4 @@
-# StableLM - Open Assistant
+# MosaicML's MPT-7B-Chat
 
 ## Description
 
