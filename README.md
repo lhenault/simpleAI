@@ -5,7 +5,7 @@ A self-hosted alternative to the not-so-open AI API. It is focused on replicatin
 - [x] Text completion (`/completions`)
     - ✔️ Non `stream` responses
     - ✔️ `stream` responses
-- [x] Chat (`/chat/completions`) [ [example](/examples/GPT-NeoXT-Chat-Base-20B/) ]
+- [x] Chat (`/chat/completions`) [ [example](/examples/MPT-7B-Chat/) ]
     - ✔️ Non `stream` responses
     - ✔️ `stream` responses
 - [x] Edits (`/edits`) [ [example](/examples/alpaca-lora-7B/) ]
