@@ -3,7 +3,7 @@ from pathlib import Path
 import requests
 from huggingface_hub import hf_hub_download
 
-MODEL = "rwkv-4-pile-169m"
+MODEL = "raven-1b-ctx4096"
 
 TOKENIZER_PATH = Path(__file__).parent / "20B_tokenizer.json"
 models = {
@@ -22,6 +22,14 @@ models = {
     "rwkv-4-pile-169m": {
         "repo_id": "BlinkDL/rwkv-4-pile-169m",
         "title": "RWKV-4-Pile-169M-20220807-8023",
+    },
+    "raven-1b-ctx4096": {
+        "repo_id": "BlinkDL/rwkv-4-raven",
+        "title": "RWKV-4-Raven-1B5-v11-Eng99%-Other1%-20230425-ctx4096",
+    },
+    "raven-3b-ctx4096": {
+        "repo_id": "BlinkDL/rwkv-4-raven",
+        "title": "RWKV-4-Raven-3B-v11-Eng99%-Other1%-20230425-ctx4096",
     },
 }
 

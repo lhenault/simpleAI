@@ -1,17 +1,24 @@
+import json
 import logging
+import re
 from dataclasses import dataclass
 
 import lib_raven
 import torch
 from simple_ai.api.grpc.chat.server import LanguageModel
-from simple_ai.utils import format_chat_log
 
 
-def endOverlap(a, b):
-    for i in range(1, len(a) + 1):
-        if b.startswith(a[-i:]):
-            return i
-    return 0
+def format_chat_log(chat: list[dict[str, str]] = dict()) -> str:
+    raw_chat_text = ""
+    for item in chat:
+        if item["role"] not in ("user", "assistant"):
+            continue
+        role = "Bob" if item.get("role") == "user" else "Alice"
+        content = item.get("content").strip()
+        content = re.sub("\n+", "\n", content)
+
+        raw_chat_text += f"{role}: {content}\n\n"
+    return raw_chat_text + "Alice:"
 
 
 @dataclass(unsafe_hash=True)
@@ -32,7 +39,7 @@ class RavenRWKVModel(LanguageModel):
         **kwargs,
     ) -> str:
         prompt = format_chat_log(chatlog)
-        output = lib_raven.chat(
+        output = lib_raven.complete(
             prompt,
             self.model,
             self.pipeline,
@@ -66,9 +73,11 @@ class RavenRWKVModel(LanguageModel):
         top_p: int = 0.5,
         presencePenalty: int = 0.4,
         countPenalty: int = 0.4,
-        *args,
+        stop=None,
+        # *args,
         **kwargs,
     ) -> str:
+        stop = json.loads(stop)
         output = lib_raven.complete(
             prompt,
             self.model,
@@ -78,6 +87,7 @@ class RavenRWKVModel(LanguageModel):
             top_p=top_p,
             presencePenalty=presencePenalty,
             countPenalty=countPenalty,
+            stop_words=stop,
         )
         yield from output
 
@@ -94,11 +104,11 @@ class RavenRWKVModel(LanguageModel):
     ):
         yield [{"role": "raven"}]
 
-        stop_words = set([f"{message['role']}:" for message in chatlog])
+        stop_words = ["\n\nBob:", "\n\nAlice:"]
 
         prompt = format_chat_log(chatlog)
-        chunk = ""
-        for delta in lib_raven.chat(
+        first = True
+        for delta in lib_raven.complete(
             prompt,
             self.model,
             self.pipeline,
@@ -108,26 +118,13 @@ class RavenRWKVModel(LanguageModel):
             top_p=top_p,
             presencePenalty=presencePenalty,
             countPenalty=countPenalty,
+            stop_words=stop_words,
         ):
-            chunk = chunk + delta
-            longest_stopword = max(map(len, stop_words))
-
-            if start_idx := max(map(lambda stop_word: endOverlap(chunk, stop_word), stop_words)):
-                if start_idx > longest_stopword:
-                    start_idx = longest_stopword  # can no longer be a stopword so cut it down
-                good, chunk = chunk[:-start_idx], chunk[-start_idx:]
-
-                if good:
-                    yield [{"content": good}]
-
-                if any(map(lambda stop_word: chunk.startswith(stop_word), stop_words)):
-                    return
-                continue
-
-            # if start_idx:=max(map(lambda stop_word: endOverlap(stop_word, chunk), stop_words))>0:
-
-            yield [{"content": chunk}]
-            chunk = ""
+            clean_delta = delta
+            if first:
+                clean_delta = delta[1:]  ## remove leading whitespace in completion
+                first = False
+            yield [{"content": clean_delta}]
 
     def embed(
         self,
