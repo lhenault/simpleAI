@@ -37,8 +37,7 @@ def sanitize_user_input(
 
 
 def format_chat_log(chat: list[dict[str, str]] = dict()) -> str:
-    """MosaicML's MPT-7B-Chat uses [ChatML](https://github.com/openai/openai-python/blob/main/chatml.md) format.
-    """
+    """MosaicML's MPT-7B-Chat uses [ChatML](https://github.com/openai/openai-python/blob/main/chatml.md) format."""
     raw_chat_text = ""
     for item in chat:
         raw_chat_text += f"<|im_start|>{sanitize_user_input(item.get('role'))}\n{sanitize_user_input(item.get('content'))}<|im_end|>\n"
