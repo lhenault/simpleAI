@@ -5,12 +5,12 @@ Here you can several examples of how to use [SimpleAI](https://github.com/lhenau
 ## Overview
 
 | Model | Description | Number of parameters | Chat | Chat (streaming) | Instruct | Completion | Embedding |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | --- | --- |
 | [MPT-7B-Chat](/MPT-7B-Chat) | MosaicML's MPT model fine-tuned for chat | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ |
 | [StableLM - Open-Assistant](/stablelm-open-assistant) | StabilityAI's StableLM model fine-tuned for chat by Open-Assistant | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ |
 | [Alpaca](/alpaca-lora-7B) | Instruct model using LoRA to reproduce the Stanford Alpaca model | 7B | ❌ | ❌ | ✔️ | ❌ | ❌ |
 | [Sentence-Transformers](/alpaca-lora-7B) | A basic example on how to use `sentence-transformers` to create embeddings from text | N/A | ❌ | ❌ | ❌ | ❌ | ✔️ |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | --- | --- |
 
 ## External repositories
 
