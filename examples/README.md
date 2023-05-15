@@ -16,7 +16,7 @@ Here you can several examples of how to use [SimpleAI](https://github.com/lhenau
 
 ### **simple-rwkv**
 
-Find it [[here](https://github.com/Nintorac/simple_rwkv)].
+Find it [here](https://github.com/Nintorac/simple_rwkv).
 
 > This project uses the RWKV-LM model and turns it into an gRPC service that can be used through SimpleAI.
 >  
