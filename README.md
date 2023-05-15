@@ -12,7 +12,7 @@ A self-hosted alternative to the not-so-open AI API. It is focused on replicatin
 - [x] Embeddings (`/embeddings`) [ [example](/examples/sentence-transformers) ]
 - [ ] Not supported (yet): `images`, `audio`, `files`, `fine-tunes`, `moderations`
 
-It allows you to experiment with competing approaches quickly and easily. You can find a list of ready-to-use examples [here](/examples)
+It allows you to experiment with competing approaches quickly and easily. You can find a list of ready-to-use examples [here](/examples).
 
 ![Overview](/assets/overview.jpg)
 
