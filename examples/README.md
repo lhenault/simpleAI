@@ -6,10 +6,10 @@ Here you can several examples of how to use [SimpleAI](https://github.com/lhenau
 
 | Model | Description | Number of parameters | Chat | Chat (streaming) | Instruct | Completion | Embedding |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [MPT-7B-Chat](https://github.com/lhenault/simpleAI/examples/MPT-7B-Chat) | MosaicML's MPT model fine-tuned for chat | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ |
-| [StableLM - Open-Assistant](https://github.com/lhenault/simpleAI/examples/stablelm-open-assistant) | StabilityAI's StableLM model fine-tuned for chat by Open-Assistant | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ |
-| [Alpaca](https://github.com/lhenault/simpleAI/examples/alpaca-lora-7B) | Instruct model using LoRA to reproduce the Stanford Alpaca model | 7B | ❌ | ❌ | ✔️ | ❌ | ❌ |
-| [Sentence-Transformers](https://github.com/lhenault/simpleAI/examples/alpaca-lora-7B) | A basic example on how to use `sentence-transformers` to create embeddings from text | N/A | ❌ | ❌ | ❌ | ❌ | ✔️ |
+| [MPT-7B-Chat](https://github.com/lhenault/simpleAI/tree/examples/MPT-7B-Chat) | MosaicML's MPT model fine-tuned for chat | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ |
+| [StableLM - Open-Assistant](https://github.com/lhenault/simpleAI/tree/examples/stablelm-open-assistant) | StabilityAI's StableLM model fine-tuned for chat by Open-Assistant | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ |
+| [Alpaca](https://github.com/lhenault/simpleAI/tree/examples/alpaca-lora-7B) | Instruct model using LoRA to reproduce the Stanford Alpaca model | 7B | ❌ | ❌ | ✔️ | ❌ | ❌ |
+| [Sentence-Transformers](https://github.com/lhenault/simpleAI/tree/examples/alpaca-lora-7B) | A basic example on how to use `sentence-transformers` to create embeddings from text | N/A | ❌ | ❌ | ❌ | ❌ | ✔️ |
 
 ## External repositories
 
