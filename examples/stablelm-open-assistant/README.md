@@ -18,11 +18,11 @@ Then declare your model in your *SimpleAI* configuration file `models.toml`:
 
 ```toml
 [stablelm-open-assistant]
-    [stablelm-open-assistant]
+    [stablelm-open-assistant.metadata]
         owned_by    = 'OpenAssistant'
         permission  = []
         description = 'This is the 7th iteration English supervised-fine-tuning (SFT) model of the Open-Assistant project. It is based on a StableLM 7B that was fine-tuned on human demonstrations of assistant conversations collected through the https://open-assistant.io/ human feedback web app before April 12, 2023.'
-    [stablelm-open-assistant]
+    [stablelm-open-assistant.network]
         type = 'gRPC'
         url = 'localhost:50051'
 ```
