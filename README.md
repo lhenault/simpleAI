@@ -2,7 +2,7 @@
 
 A self-hosted alternative to the not-so-open AI API. It is focused on replicating the main endpoints for LLM:
 
-- [x] Text completion (`/completions`)
+- [x] Text completion (`/completions`) [ [example](/examples/MPT-7B-Storywriter-65kplus/) ]
     - ✔️ Non `stream` responses
     - ✔️ `stream` responses
 - [x] Chat (`/chat/completions`) [ [example](/examples/MPT-7B-Chat/) ]
@@ -12,7 +12,7 @@ A self-hosted alternative to the not-so-open AI API. It is focused on replicatin
 - [x] Embeddings (`/embeddings`) [ [example](/examples/sentence-transformers) ]
 - [ ] Not supported (yet): `images`, `audio`, `files`, `fine-tunes`, `moderations`
 
-It allows you to experiment with competing approaches quickly and easily.
+It allows you to experiment with competing approaches quickly and easily. You can find a list of ready-to-use examples [here](/examples)
 
 ![Overview](/assets/overview.jpg)
 
