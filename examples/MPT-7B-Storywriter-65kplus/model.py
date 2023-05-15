@@ -1,11 +1,19 @@
 import logging
 from dataclasses import dataclass
+from threading import Event, Thread
 from typing import Optional, Union
 
 import torch
 from get_models import MODEL_ID
 from simple_ai.api.grpc.chat.server import LanguageModel
-from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer, StoppingCriteria
+from transformers import (
+    AutoConfig,
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    StoppingCriteria,
+    StoppingCriteriaList,
+    TextIteratorStreamer,
+)
 
 
 @dataclass
@@ -97,3 +105,79 @@ class CompletionModel(LanguageModel):
             logging.exception(ex)
 
         return ""
+
+    def stream_complete(
+        self,
+        prompt: str = None,
+        max_tokens: int = 512,
+        temperature: float = 0.6,
+        end_of_text: Union[str, list, tuple] = ("<|endoftext|>",),
+        *args,
+        **kwargs,
+    ) -> str:
+        try:
+            if isinstance(end_of_text, str):
+                end_of_text = (end_of_text,)
+
+            stop = StopOnTokens(stop_token_ids=self.tokenizer.convert_tokens_to_ids(end_of_text))
+
+            if isinstance(end_of_text, str):
+                end_of_text = (end_of_text,)
+
+            logging.info(f"Input prompt:\n{prompt}")
+
+            inputs = self.tokenizer(
+                prompt, return_tensors="pt", truncation=True, max_length=MAX_SEQUENCE_LENGTH // 2
+            ).to(self.model.device)
+
+            # Use Torch's Flash attention
+            with torch.backends.cuda.sdp_kernel(
+                enable_flash=True, enable_math=False, enable_mem_efficient=False
+            ):
+                # Generate stream, yield delta
+                streamer = TextIteratorStreamer(self.tokenizer, skip_prompt=True)
+                generation_kwargs = dict(
+                    **inputs,
+                    streamer=streamer,
+                    max_new_tokens=max_tokens,
+                    do_sample=True,
+                    temperature=temperature,
+                    pad_token_id=self.tokenizer.eos_token_id,
+                    stopping_criteria=StoppingCriteriaList([stop]),
+                )
+
+                stream_complete = Event()
+
+                def generate_and_signal_complete(generation_kwargs=generation_kwargs):
+                    self.model.generate(**generation_kwargs)
+                    stream_complete.set()
+
+                thread = Thread(target=generate_and_signal_complete)
+                thread.start()
+
+                logging.info("[Completions/Streaming] Output:")
+                ended = False
+                for delta in streamer:
+                    if delta:
+                        for item in end_of_text:
+                            if item in delta:
+                                logging.info(delta)
+                                yield delta.split(item)[0]
+                                ended = True
+                                break
+                        if ended:
+                            break
+                        logging.info(delta)
+                        yield delta
+
+                thread.join(timeout=60)
+
+                # Avoid issues with GPU vRAM
+                del streamer
+                del inputs
+                torch.cuda.empty_cache()
+
+        except Exception as ex:
+            logging.exception(ex)
+
+        return

@@ -4,13 +4,13 @@ Here you can several examples of how to use [SimpleAI](https://github.com/lhenau
 
 ## Overview
 
-| Model | Description | Number of parameters | Chat | Chat (streaming) | Instruct | Completion | Embedding |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| [MPT-7B-Chat](/examples/MPT-7B-Chat) | MosaicML's MPT model fine-tuned for chat | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ |
-| [MPT-7B-Storywriter-65k+](/examples/MPT-7B-Storywriter-65kplus) | MosaicML's MPT model fine-tuned with a context length of 65k tokens on a filtered fiction subset of the books3 dataset | 7B | ❌ | ❌ | ❌ | ✔️ | ❌ |
-| [StableLM - Open-Assistant](/examples/stablelm-open-assistant) | StabilityAI's StableLM model fine-tuned for chat by Open-Assistant | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ |
-| [Alpaca](/examples/alpaca-lora-7B) | Instruct model using LoRA to reproduce the Stanford Alpaca model | 7B | ❌ | ❌ | ✔️ | ❌ | ❌ |
-| [Sentence-Transformers](/examples/sentence-transformers) | A basic example on how to use `sentence-transformers` to create embeddings from text | N/A | ❌ | ❌ | ❌ | ❌ | ✔️ |
+| Model | Description | Number of parameters | Chat | Chat (streaming) | Instruct | Completion | Completion (streaming) | Embedding |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [MPT-7B-Chat](/examples/MPT-7B-Chat) | MosaicML's MPT model fine-tuned for chat | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ | ❌ |
+| [MPT-7B-Storywriter-65k+](/examples/MPT-7B-Storywriter-65kplus) | MosaicML's MPT model fine-tuned with a context length of 65k tokens on a filtered fiction subset of the books3 dataset | 7B | ❌ | ❌ | ❌ | ✔️ | ✔️ | ❌ |
+| [StableLM - Open-Assistant](/examples/stablelm-open-assistant) | StabilityAI's StableLM model fine-tuned for chat by Open-Assistant | 7B | ✔️ | ✔️ | ❌ | ❌ | ❌ | ❌ |
+| [Alpaca](/examples/alpaca-lora-7B) | Instruct model using LoRA to reproduce the Stanford Alpaca model | 7B | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌ |
+| [Sentence-Transformers](/examples/sentence-transformers) | A basic example on how to use `sentence-transformers` to create embeddings from text | N/A | ❌ | ❌ | ❌ | ❌ | ❌ | ✔️ |
 
 ## External repositories
 
