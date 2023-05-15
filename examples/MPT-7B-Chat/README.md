@@ -18,11 +18,11 @@ Then declare your model in your *SimpleAI* configuration file `models.toml`:
 
 ```toml
 [mpt-7b-chat]
-    [mpt-7b-chat]
+    [mpt-7b-chat.metadata]
         owned_by    = 'MosaicML'
         permission  = []
         description = 'MPT-7B-Chat is a chatbot-like model for dialogue generation. Built by finetuning MPT-7B on the ShareGPT-Vicuna, HC3, Alpaca, Helpful and Harmless, and Evol-Instruct datasets.'
-    [mpt-7b-chat]
+    [mpt-7b-chat.network]
         type = 'gRPC'
         url = 'localhost:50051'
 ```
