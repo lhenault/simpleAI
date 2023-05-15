@@ -7,12 +7,12 @@ import torch
 from get_models import MODEL_ID
 from simple_ai.api.grpc.chat.server import LanguageModel
 from transformers import (
-    AutoConfig, 
-    AutoModelForCausalLM, 
-    AutoTokenizer, 
+    AutoConfig,
+    AutoModelForCausalLM,
+    AutoTokenizer,
     StoppingCriteria,
     StoppingCriteriaList,
-    TextIteratorStreamer
+    TextIteratorStreamer,
 )
 
 
@@ -105,7 +105,7 @@ class CompletionModel(LanguageModel):
             logging.exception(ex)
 
         return ""
-    
+
     def stream_complete(
         self,
         prompt: str = None,
@@ -125,7 +125,7 @@ class CompletionModel(LanguageModel):
                 end_of_text = (end_of_text,)
 
             logging.info(f"Input prompt:\n{prompt}")
-            
+
             inputs = self.tokenizer(
                 prompt, return_tensors="pt", truncation=True, max_length=MAX_SEQUENCE_LENGTH // 2
             ).to(self.model.device)
