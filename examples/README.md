@@ -16,6 +16,8 @@ Here you can several examples of how to use [SimpleAI](https://github.com/lhenau
 
 ### **simple-rwkv**
 
+Find it [[here](https://github.com/Nintorac/simple_rwkv)].
+
 > This project uses the RWKV-LM model and turns it into an gRPC service that can be used through SimpleAI.
 >  
 > RWKV is an RNN with Transformer-level language model performance that can be trained like a GPT transformer and is 100% attention-free. It combines the best of RNN and transformer, providing great performance, fast inference, saves VRAM, fast training, "infinite" ctx_len, and free sentence embedding.
