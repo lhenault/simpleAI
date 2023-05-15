@@ -24,13 +24,13 @@ def main():
 
     # Init config args
     init_parser = subparsers.add_parser("init")
-    init_parser.add_argument("--path", default="./")
+    init_parser.add_argument("--path", default="./", type=str)
     init_parser.set_defaults(func=init_app)
 
     # Serving args
     serving_parser = subparsers.add_parser("serve")
-    serving_parser.add_argument("--host", default="127.0.0.1")
-    serving_parser.add_argument("--port", default=8080)
+    serving_parser.add_argument("--host", default="127.0.0.1", type=str)
+    serving_parser.add_argument("--port", default=8080, type=int)
     serving_parser.set_defaults(func=serve_app)
 
     # Parse, call the appropriate function
