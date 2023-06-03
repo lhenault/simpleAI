@@ -9,7 +9,7 @@ packages = [{include = "simple_ai", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.9"
 fastapi= "^0.94.1"
-grpcio= "^1.51.3"
+grpcio= "^1.42.0"
 protobuf= "^4.21.3"
 uvicorn= "^0.21.0"
 tomli= {version = "^2.0.1", python = "<3.11"}
