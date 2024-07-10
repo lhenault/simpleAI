@@ -4,6 +4,7 @@ from concurrent import futures
 
 import grpc
 from google.protobuf.json_format import MessageToDict
+from google.protobuf.struct_pb2 import Value
 
 from . import llm_chat_pb2
 from . import llm_chat_pb2_grpc
@@ -33,7 +34,7 @@ class LanguageModelServicer(llm_chat_pb2_grpc.LanguageModelServicer):
 
         grpc_chatlog = llm_chat_pb2.ChatLogOutput()
         for chat in output:
-            grpc_chat = llm_chat_pb2.Chat(role=chat.get("role"), content=chat.get("content"))
+            grpc_chat = llm_chat_pb2.Chat(role=chat.get("role"), content=Value(string_value=chat.get("content")))
             grpc_chatlog.messages.append(grpc_chat)
         return grpc_chatlog
 
