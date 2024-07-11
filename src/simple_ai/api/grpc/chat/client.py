@@ -126,7 +126,11 @@ def run_stream(
         )
 
         for role, content in messages:
-            grpc_chat = llm_chat_pb2.Chat(role=role, content=content)
+            if isinstance(content, str):
+                grpc_chat = llm_chat_pb2.Chat(role=role, content=Value(string_value=content))
+            else:
+                list_value = ListValue(values=[Value(struct_value=dict_to_struct(item)) for item in content])
+                grpc_chat = llm_chat_pb2.Chat(role=role, content=Value(list_value=list_value))
             grpc_chatlog.messages.append(grpc_chat)
 
         yield from stream_chatlog(stub, grpc_chatlog)
