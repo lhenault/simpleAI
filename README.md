@@ -201,6 +201,30 @@ if __name__ == "__main__":
     
 ```
 
+### I want to add a custom endpoint
+
+To add a custom endpoint (here `/hello`) to your server:
+
+```python
+import uvicorn
+from simple_ai.server import app
+from fastapi import APIRouter
+
+router = APIRouter()
+
+async def hello():
+    return {"Hello": "World"}
+
+router.add_api_route("/hello", hello, methods=["GET"])
+app.include_router(router)
+
+def serve_app(app=app, host="0.0.0.0", port=8080):
+    uvicorn.run(app=app, host=host, port=port)
+    
+if __name__ == "__main__":
+    serve_app()
+```
+
 ## Contribute
 
 This is very much work in progress and far from being perfect, so let me know if you want to help. PR, issues, documentation, cool logo, all the usual candidates are welcome.
