@@ -5,10 +5,10 @@ import warnings
 
 from . import llm_chat_pb2 as llm__chat__pb2
 
-GRPC_GENERATED_VERSION = '1.64.1'
+GRPC_GENERATED_VERSION = "1.64.1"
 GRPC_VERSION = grpc.__version__
-EXPECTED_ERROR_RELEASE = '1.65.0'
-SCHEDULED_RELEASE_DATE = 'June 25, 2024'
+EXPECTED_ERROR_RELEASE = "1.65.0"
+SCHEDULED_RELEASE_DATE = "June 25, 2024"
 _version_not_supported = False
 
 try:
@@ -19,20 +19,19 @@ except ImportError:
 
 if _version_not_supported:
     warnings.warn(
-        f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in llm_chat_pb2_grpc.py depends on'
-        + f' grpcio>={GRPC_GENERATED_VERSION}.'
-        + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
-        + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
-        + f' This warning will become an error in {EXPECTED_ERROR_RELEASE},'
-        + f' scheduled for release on {SCHEDULED_RELEASE_DATE}.',
-        RuntimeWarning
+        f"The grpc package installed is at version {GRPC_VERSION},"
+        + f" but the generated code in llm_chat_pb2_grpc.py depends on"
+        + f" grpcio>={GRPC_GENERATED_VERSION}."
+        + f" Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}"
+        + f" or downgrade your generated code using grpcio-tools<={GRPC_VERSION}."
+        + f" This warning will become an error in {EXPECTED_ERROR_RELEASE},"
+        + f" scheduled for release on {SCHEDULED_RELEASE_DATE}.",
+        RuntimeWarning,
     )
 
 
 class LanguageModelStub(object):
-    """Interface exported by the server.
-    """
+    """Interface exported by the server."""
 
     def __init__(self, channel):
         """Constructor.
@@ -41,15 +40,17 @@ class LanguageModelStub(object):
             channel: A grpc.Channel.
         """
         self.Chat = channel.unary_unary(
-                '/languagemodelchat.LanguageModel/Chat',
-                request_serializer=llm__chat__pb2.ChatLogInput.SerializeToString,
-                response_deserializer=llm__chat__pb2.ChatLogOutput.FromString,
-                _registered_method=True)
+            "/languagemodelchat.LanguageModel/Chat",
+            request_serializer=llm__chat__pb2.ChatLogInput.SerializeToString,
+            response_deserializer=llm__chat__pb2.ChatLogOutput.FromString,
+            _registered_method=True
+        )
         self.Stream = channel.unary_stream(
-                '/languagemodelchat.LanguageModel/Stream',
-                request_serializer=llm__chat__pb2.ChatLogInput.SerializeToString,
-                response_deserializer=llm__chat__pb2.ChatLogOutput.FromString,
-                _registered_method=True)
+            "/languagemodelchat.LanguageModel/Stream",
+            request_serializer=llm__chat__pb2.ChatLogInput.SerializeToString,
+            response_deserializer=llm__chat__pb2.ChatLogOutput.FromString,
+            _registered_method=True
+        )
 
 
 class LanguageModelServicer(object):
@@ -57,59 +58,57 @@ class LanguageModelServicer(object):
     """
 
     def Chat(self, request, context):
-        """Simple RPC
-        """
+        """Simple RPC"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def Stream(self, request, context):
-        """Server-to-client streaming RPC.
-        """
+        """Server-to-client streaming RPC."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_LanguageModelServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Chat': grpc.unary_unary_rpc_method_handler(
-                    servicer.Chat,
-                    request_deserializer=llm__chat__pb2.ChatLogInput.FromString,
-                    response_serializer=llm__chat__pb2.ChatLogOutput.SerializeToString,
-            ),
-            'Stream': grpc.unary_stream_rpc_method_handler(
-                    servicer.Stream,
-                    request_deserializer=llm__chat__pb2.ChatLogInput.FromString,
-                    response_serializer=llm__chat__pb2.ChatLogOutput.SerializeToString,
-            ),
+        "Chat": grpc.unary_unary_rpc_method_handler(
+            servicer.Chat,
+            request_deserializer=llm__chat__pb2.ChatLogInput.FromString,
+            response_serializer=llm__chat__pb2.ChatLogOutput.SerializeToString,
+        ),
+        "Stream": grpc.unary_stream_rpc_method_handler(
+            servicer.Stream,
+            request_deserializer=llm__chat__pb2.ChatLogInput.FromString,
+            response_serializer=llm__chat__pb2.ChatLogOutput.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'languagemodelchat.LanguageModel', rpc_method_handlers)
+        "languagemodelchat.LanguageModel", rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('languagemodelchat.LanguageModel', rpc_method_handlers)
+    server.add_registered_method_handlers("languagemodelchat.LanguageModel", rpc_method_handlers)
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class LanguageModel(object):
-    """Interface exported by the server.
-    """
+    """Interface exported by the server."""
 
     @staticmethod
     def Chat(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None
+    ):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/languagemodelchat.LanguageModel/Chat',
+            "/languagemodelchat.LanguageModel/Chat",
             llm__chat__pb2.ChatLogInput.SerializeToString,
             llm__chat__pb2.ChatLogOutput.FromString,
             options,
@@ -120,23 +119,25 @@ class LanguageModel(object):
             wait_for_ready,
             timeout,
             metadata,
-            _registered_method=True)
+            _registered_method=True
+        )
 
     @staticmethod
     def Stream(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None
+    ):
         return grpc.experimental.unary_stream(
             request,
             target,
-            '/languagemodelchat.LanguageModel/Stream',
+            "/languagemodelchat.LanguageModel/Stream",
             llm__chat__pb2.ChatLogInput.SerializeToString,
             llm__chat__pb2.ChatLogOutput.FromString,
             options,
@@ -147,4 +148,5 @@ class LanguageModel(object):
             wait_for_ready,
             timeout,
             metadata,
-            _registered_method=True)
+            _registered_method=True
+        )

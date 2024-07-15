@@ -34,7 +34,9 @@ class LanguageModelServicer(llm_chat_pb2_grpc.LanguageModelServicer):
 
         grpc_chatlog = llm_chat_pb2.ChatLogOutput()
         for chat in output:
-            grpc_chat = llm_chat_pb2.Chat(role=chat.get("role"), content=Value(string_value=chat.get("content")))
+            grpc_chat = llm_chat_pb2.Chat(
+                role=chat.get("role"), content=Value(string_value=chat.get("content"))
+            )
             grpc_chatlog.messages.append(grpc_chat)
         return grpc_chatlog
 
@@ -55,7 +57,9 @@ class LanguageModelServicer(llm_chat_pb2_grpc.LanguageModelServicer):
         for chat in output:
             grpc_chatlog = llm_chat_pb2.ChatLogOutput()
             for message in chat:
-                grpc_chat = llm_chat_pb2.Chat(role=message.get("role"), content=Value(string_value=message.get("content")))
+                grpc_chat = llm_chat_pb2.Chat(
+                    role=message.get("role"), content=Value(string_value=message.get("content"))
+                )
                 grpc_chatlog.messages.append(grpc_chat)
             yield grpc_chatlog
 

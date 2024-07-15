@@ -11,7 +11,11 @@ class LanguageModel:
                 return [
                     {
                         "type": item.get("type"),
-                        "text": item.get("text")[::-1] if item.get("type") == "text" else item.get("image_url")
+                        "text": (
+                            item.get("text")[::-1]
+                            if item.get("type") == "text"
+                            else item.get("image_url")
+                        ),
                     }
                     for item in content
                 ]
